@@ -34,7 +34,7 @@ namespace NB_API.Models
         //        //optionsBuilder.UseSqlServer("Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
         //        //optionsBuilder.UseSqlServer("Data Source=MININT-AVDHD5F\\MSSQLSERVER2019;Initial Catalog=UserAPI;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         //    }
-        //}
+        //} 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
