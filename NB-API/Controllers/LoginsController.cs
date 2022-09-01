@@ -15,7 +15,6 @@ namespace NB_API.Controllers
     public class LoginsController : ControllerBase
     {
         private readonly NBDBContext _context;
-        private readonly IConfiguration _configurations;
         private readonly IHashingService _hashingservice;
 
         /// <summary>
@@ -23,10 +22,9 @@ namespace NB_API.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="configuration"></param>
-        public LoginsController(NBDBContext context, IConfiguration configuration, IHashingService hashingService)
+        public LoginsController(NBDBContext context, IHashingService hashingService)
         {
             _context = context;
-            _configurations = configuration;
             _hashingservice = hashingService;
         }
 
