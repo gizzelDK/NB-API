@@ -118,8 +118,8 @@ namespace NB_API.Controllers
                 return Unauthorized("Wrong Password!");
             }
             var retHash = _hashingService.CreateHash(newPw);
-            bruger.PwHash = (byte[])retHash[1];
-            bruger.PwSalt = (byte[])retHash[0];
+            brugerTmp.PwHash = (byte[])retHash[1];
+            brugerTmp.PwSalt = (byte[])retHash[0];
 
             try
             {
@@ -176,6 +176,15 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Bruger>> PostBruger(BrugerDto bruger)
         {
+            var brugerlist = await _context.Bruger.ToListAsync();
+            foreach(var i in brugerlist)
+            {
+                if(i.Brugernavn == bruger.Brugernavn)
+                {
+                    return BadRequest("Brugernavn eksisterer allerede");
+                }
+            }
+            
             var returBruger = new BrugerDto();
             var nybruger = new Bruger();
             nybruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
@@ -198,39 +207,70 @@ namespace NB_API.Controllers
             return CreatedAtAction("GetBruger", new { id = nybruger.Id }, returBruger);
         }
 
-
+        //virker ikke med jwt token 
         // DELETE: api/Brugers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBruger(int id, JwtSecurityToken token)
-        {
-            if (_context.Bruger == null)
-            {
-                return NotFound();
-            }
-            if (!_hashingService.VeriryBrugerId(id, token))
-            {
-                return Unauthorized("You do not have permission to Delete Users!");
-            }
-            var bruger = await _context.Bruger.FindAsync(id);
-            if (bruger == null)
-            {
-                return NotFound();
-            }
-            if (bruger.Deleted)
-            {
-                return BadRequest("User already Deleted on: " + bruger.DeleteTime);
-            }
-            bruger.Deleted = true;
-            bruger.DeleteTime = DateTime.Now;
-            //_context.Bruger.Remove(bruger);
-            await _context.SaveChangesAsync();
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteBruger(int id, string token)
+        //{
+        //    if (_context.Bruger == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (!_hashingService.VeriryBrugerId(id, token))
+        //    {
+        //        return Unauthorized("You do not have permission to Delete Users!");
+        //    }
+        //    var bruger = await _context.Bruger.FindAsync(id);
+        //    if (bruger == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (bruger.Deleted)
+        //    {
+        //        return BadRequest("User already Deleted on: " + bruger.DeleteTime);
+        //    }
+        //    bruger.Deleted = true;
+        //    bruger.DeleteTime = DateTime.Now;
+        //    //_context.Bruger.Remove(bruger);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return Ok();
+        //}
+
+        //[HttpGet("enavn/{enavn}")]
+        //public async Task<ActionResult<Bruger>> GetBrugerEnavn(string enavn)
+        //{
+        //    var joinBrugerKontaktOplysninger = await _context.Bruger.Join(_context.Kontaktoplysninger,
+        //                                                                    kontatkoplysninger => kontatkoplysninger.Id,
+        //                                                                    bruger => bruger.Id,
+        //                                                                    (kontaktOplysninger, bruger) => new
+        //                                                                    {
+        //                                                                        enavn = kontaktOplysninger.Kontaktoplysninger.Enavn,
+        //                                                                        brugernavn = kontaktOplysninger.Brugernavn,
+        //                                                                        id = bruger.Id
+        //                                                                    }).Where(x => x.enavn == enavn).ToListAsync();
+          
+        //    var dtoList = new List<BrugerDto>();
+        //    foreach (var i in joinBrugerKontaktOplysninger)
+        //    {
+        //        var bruger = new BrugerDto();
+        //        bruger.Id = i.id;
+        //        bruger.Brugernavn = i.brugernavn;
+        //        bruger.KontaktoplysningerId = i.KontaktoplysningerId;
+        //        bruger.Kontaktoplysninger = i.Kontaktoplysninger;
+        //        bruger.RolleId = i.RolleId;
+        //        bruger.Rolle = i.Rolle;
+        //        bruger.Events = i.Events;
+        //        bruger.Certifikat = i.Certifikat;
+        //        dtoList.Add(bruger);
+        //    }
+        //    return Ok(dtoList);
+        //}
 
         private bool BrugerExists(int id)
         {
             return (_context.Bruger?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
     }
 }

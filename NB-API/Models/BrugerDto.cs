@@ -11,5 +11,6 @@
         public Kontaktoplysninger? Kontaktoplysninger { get; set; }
         public ICollection<Event>? Events { get; set; }
         public Byte? Certifikat { get; set; }
+   
     }
 }
