@@ -19,5 +19,6 @@
         public Byte? Certifikat { get; set; }
         public bool AcceptedPolicy { get; set; } = false;
         public bool Deleted { get; set; } = false;
+        public DateTime DeleteTime { get; set; }
     }
 }

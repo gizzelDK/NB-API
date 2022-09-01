@@ -65,7 +65,7 @@ namespace NB_API.Controllers
 
             if(!_hashingservice.VerifyHash(login.Pw, bruger.PwHash, bruger.PwSalt))
             {
-                return BadRequest("Wrong password");
+                return Unauthorized("Wrong password");
             }
             string token = _hashingservice.CreateToken(bruger);
             var dblogin = new Login();
@@ -75,7 +75,7 @@ namespace NB_API.Controllers
             _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
             _context.Login.Add(dblogin);
             await _context.SaveChangesAsync();
-            return Ok("{ \"bearer\":\"" + token + "\"}");
+            return Accepted("{ \"bearer\":\"" + token + "\"}");
 
         }
 

@@ -65,5 +65,13 @@ namespace NB_API.Services
 
             return jwt;
         }
+        public bool VeriryBrugerId(int id, JwtSecurityToken token)
+        {
+            if (id.ToString() != token.Id)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

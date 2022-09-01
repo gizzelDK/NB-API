@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -99,7 +100,7 @@ namespace NB_API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // PUT api/Brugere/pw
@@ -114,7 +115,7 @@ namespace NB_API.Controllers
             }
             if (!_hashingService.VerifyHash(oldPw, brugerTmp.PwHash, brugerTmp.PwSalt))
             {
-                return BadRequest("Bad Password!");
+                return Unauthorized("Wrong Password!");
             }
             var retHash = _hashingService.CreateHash(newPw);
             bruger.PwHash = (byte[])retHash[1];
@@ -136,7 +137,7 @@ namespace NB_API.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // PUT: api/Brugers/5
@@ -175,6 +176,7 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Bruger>> PostBruger(BrugerDto bruger)
         {
+            var returBruger = new BrugerDto();
             var nybruger = new Bruger();
             nybruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
             nybruger.RolleId = bruger.RolleId;
@@ -186,25 +188,41 @@ namespace NB_API.Controllers
             _context.Bruger.Add(nybruger);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBruger", new { id = nybruger.Id }, nybruger);
+            returBruger.Id = nybruger.Id;
+            returBruger.Brugernavn = nybruger.Brugernavn;
+            returBruger.KontaktoplysningerId = nybruger.KontaktoplysningerId;
+            returBruger.Kontaktoplysninger = nybruger.Kontaktoplysninger;
+            returBruger.RolleId = nybruger.RolleId;
+            returBruger.Rolle = nybruger.Rolle;
+
+            return CreatedAtAction("GetBruger", new { id = nybruger.Id }, returBruger);
         }
 
 
         // DELETE: api/Brugers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBruger(int id)
+        public async Task<IActionResult> DeleteBruger(int id, JwtSecurityToken token)
         {
             if (_context.Bruger == null)
             {
                 return NotFound();
+            }
+            if (!_hashingService.VeriryBrugerId(id, token))
+            {
+                return Unauthorized("You do not have permission to Delete Users!");
             }
             var bruger = await _context.Bruger.FindAsync(id);
             if (bruger == null)
             {
                 return NotFound();
             }
-
-            _context.Bruger.Remove(bruger);
+            if (bruger.Deleted)
+            {
+                return BadRequest("User already Deleted on: " + bruger.DeleteTime);
+            }
+            bruger.Deleted = true;
+            bruger.DeleteTime = DateTime.Now;
+            //_context.Bruger.Remove(bruger);
             await _context.SaveChangesAsync();
 
             return NoContent();

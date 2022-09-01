@@ -3,14 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace NB_API.Migrations
 {
-    /// <inheritdoc />
-    public partial class InitialMigrationTest : Migration
+    public partial class DeleteTimeToBruger : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -99,7 +95,8 @@ namespace NB_API.Migrations
                     KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
                     Certifikat = table.Column<byte>(type: "tinyint", nullable: true),
                     AcceptedPolicy = table.Column<bool>(type: "bit", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -550,12 +547,17 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Rolle",
                 columns: new[] { "Id", "Level", "RolleNavn" },
-                values: new object[,]
-                {
-                    { 1, 0, 0 },
-                    { 2, 10, 10 },
-                    { 3, 20, 20 }
-                });
+                values: new object[] { 1, 0, 0 });
+
+            migrationBuilder.InsertData(
+                table: "Rolle",
+                columns: new[] { "Id", "Level", "RolleNavn" },
+                values: new object[] { 2, 10, 10 });
+
+            migrationBuilder.InsertData(
+                table: "Rolle",
+                columns: new[] { "Id", "Level", "RolleNavn" },
+                values: new object[] { 3, 20, 20 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Archive_BrugerId",
@@ -681,7 +683,6 @@ namespace NB_API.Migrations
                 column: "BryggeriId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
