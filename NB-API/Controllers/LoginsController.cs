@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NB_API.Models;
+using NB_API.Services;
 
 namespace NB_API.Controllers
 {
@@ -14,31 +15,30 @@ namespace NB_API.Controllers
     public class LoginsController : ControllerBase
     {
         private readonly NBDBContext _context;
+        private readonly IHashingService _hashingservice;
 
-        public LoginsController(NBDBContext context)
+        /// <summary>
+        /// configurations er vores Tokens dvs. får fat i settings.jason fil
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="configuration"></param>
+        public LoginsController(NBDBContext context, IHashingService hashingService)
         {
             _context = context;
+            _hashingservice = hashingService;
         }
 
         // GET: api/Logins
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Login>>> GetLogin()
         {
-          if (_context.Login == null)
-          {
-              return NotFound();
-          }
             return await _context.Login.ToListAsync();
         }
 
         // GET: api/Logins/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Login>> GetLogin(int id)
-        {
-          if (_context.Login == null)
-          {
-              return NotFound();
-          }
+        {        
             var login = await _context.Login.FindAsync(id);
 
             if (login == null)
@@ -49,50 +49,34 @@ namespace NB_API.Controllers
             return login;
         }
 
-        // PUT: api/Logins/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLogin(int id, Login login)
-        {
-            if (id != login.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(login).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LoginExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        //No Put for login 
 
         // POST: api/Logins
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Login>> PostLogin(Login login)
+        public async Task<ActionResult<Login>> PostLogin(LoginDto login)
         {
-          if (_context.Login == null)
-          {
-              return Problem("Entity set 'NBDBContext.Login'  is null.");
-          }
-            _context.Login.Add(login);
-            await _context.SaveChangesAsync();
+            var bruger = await _context.Bruger.AsNoTracking().FirstOrDefaultAsync(b => b.Brugernavn == login.Brugernavn);
+          
+            if(bruger == null)
+            {
+                return BadRequest("No such user was found");
+            }
 
-            return CreatedAtAction("GetLogin", new { id = login.Id }, login);
+            if(!_hashingservice.VerifyHash(login.Pw, bruger.PwHash, bruger.PwSalt))
+            {
+                return BadRequest("Wrong password");
+            }
+            string token = _hashingservice.CreateToken(bruger);
+            var dblogin = new Login();
+            dblogin.BrugerId = bruger.Id;
+            dblogin.Bruger = bruger;
+            /// Make sure not to create new users on login
+            _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
+            _context.Login.Add(dblogin);
+            await _context.SaveChangesAsync();
+            return Ok("{ \"bearer\":\"" + token + "\"}");
+
         }
 
         // DELETE: api/Logins/5
