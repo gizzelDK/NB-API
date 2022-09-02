@@ -10,6 +10,11 @@
         public int? KontaktoplysningerId { get; set; }
         public Kontaktoplysninger? Kontaktoplysninger { get; set; }
         public ICollection<Event>? Events { get; set; }
-        public Byte? Certifikat { get; set; }
+        public Certifikat? Certifikat { get; set; }
+        public int CertifikatId { get; set; }
+        public ICollection<Bryggeri>? Follows { get; set; }
+        public ICollection<Rapport>? Rapporter { get; set; }
+        public bool AcceptedPolicy { get; set; } = false;
+        public bool Deleted { get; set; } = false;
     }
 }

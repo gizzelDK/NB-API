@@ -10,7 +10,7 @@
         public int Postnr { get; set; }
         public string By { get; set; }
         public string Email { get; set; }
-        public string? Telefonnr { get; set; }
+        public string? TelefonNr { get; set; }
         public Bryggeri? Bryggeri { get; set; }
     }
 }
