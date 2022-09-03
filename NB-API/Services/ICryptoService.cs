@@ -2,7 +2,10 @@
 {
     public interface ICryptoService
     {
-        string DecryptString(string encrString, string key);
-        string EnryptString(string strEncrypted, string key);
+        //string DecryptString(byte encrString, string key);
+        //string EnryptString(byte strEncrypted, string key);
+
+        byte[] EncryptString(byte[] plaintext, byte[] key);
+        byte[] DecryptString(byte[] plaintext, byte[] key);
     }
 }

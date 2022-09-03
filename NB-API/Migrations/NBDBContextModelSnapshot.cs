@@ -138,10 +138,10 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte?>("Certifikat")
-                        .HasColumnType("tinyint");
+                    b.Property<int?>("CertifikatId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("DeleteTime")
+                    b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
@@ -798,7 +798,7 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
                 {
                     b.HasOne("NB_API.Models.Bruger", "Bruger")
-                        .WithMany()
+                        .WithMany("Certifikats")
                         .HasForeignKey("BrugerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -941,6 +941,8 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
+                    b.Navigation("Certifikats");
+
                     b.Navigation("Rapporter");
                 });
 

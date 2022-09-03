@@ -10,7 +10,7 @@
         public int? KontaktoplysningerId { get; set; }
         public Kontaktoplysninger? Kontaktoplysninger { get; set; }
         public ICollection<Event>? Events { get; set; }
-        public Byte? Certifikat { get; set; }
+        public int? CertifikatId { get; set; }
    
     }
 }

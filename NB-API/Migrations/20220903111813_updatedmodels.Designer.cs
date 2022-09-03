@@ -12,8 +12,8 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220901083611_DeleteTimeToBruger")]
-    partial class DeleteTimeToBruger
+    [Migration("20220903111813_updatedmodels")]
+    partial class updatedmodels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -140,10 +140,10 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte?>("Certifikat")
-                        .HasColumnType("tinyint");
+                    b.Property<int?>("CertifikatId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("DeleteTime")
+                    b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
@@ -800,7 +800,7 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
                 {
                     b.HasOne("NB_API.Models.Bruger", "Bruger")
-                        .WithMany()
+                        .WithMany("Certifikats")
                         .HasForeignKey("BrugerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -943,6 +943,8 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
+                    b.Navigation("Certifikats");
+
                     b.Navigation("Rapporter");
                 });
 

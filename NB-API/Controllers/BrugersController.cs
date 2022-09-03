@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +19,13 @@ namespace NB_API.Controllers
     {
         private readonly NBDBContext _context;
         private IHashingService _hashingService;
+        private ICryptoService _cryptoService;
 
-        public BrugersController(NBDBContext context, IHashingService hashingService)
+        public BrugersController(NBDBContext context, IHashingService hashingService, ICryptoService cryptoService)
         {
             _context = context;
             _hashingService = hashingService;
+            _cryptoService = cryptoService;
         }
 
         // GET: api/Brugers
@@ -41,7 +44,7 @@ namespace NB_API.Controllers
                 bruger.RolleId = i.RolleId;
                 bruger.Rolle = i.Rolle;
                 bruger.Events = i.Events;
-                bruger.Certifikat = i.Certifikat;
+                bruger.CertifikatId = i.CertifikatId;
                 dtoList.Add(bruger);
             }
             return Ok(dtoList);
@@ -58,15 +61,15 @@ namespace NB_API.Controllers
             {
                 return NotFound();
             }
-
+            
             brugerDto.Id = bruger.Id;
-            brugerDto.Brugernavn = bruger.Brugernavn;
+            brugerDto.Brugernavn = _cryptoService.DecryptString("kodetest",bruger.Brugernavn);
             brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
             brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
             brugerDto.RolleId = bruger.RolleId;
             brugerDto.Rolle = bruger.Rolle;
             brugerDto.Events = bruger.Events;
-            brugerDto.Certifikat = bruger.Certifikat;
+            brugerDto.CertifikatId = bruger.CertifikatId;
 
             return Ok(brugerDto);
         }
@@ -189,10 +192,11 @@ namespace NB_API.Controllers
             var nybruger = new Bruger();
             nybruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
             nybruger.RolleId = bruger.RolleId;
-            nybruger.Brugernavn = bruger.Brugernavn;
             var retHash = _hashingService.CreateHash(bruger.Pw);
+            
             nybruger.PwHash = (byte[])retHash[1];
             nybruger.PwSalt = (byte[])retHash[0];
+            //nybruger.Brugernavn = _cryptoService.EncryptString(Encoding.Unicode.GetBytes("kode"), Encoding.Unicode.GetBytes(bruger.Brugernavn));
 
             _context.Bruger.Add(nybruger);
             await _context.SaveChangesAsync();

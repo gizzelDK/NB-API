@@ -19,6 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ICryptoService, CryptoService > ();
 builder.Services.AddSwaggerGen(c =>
 {
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
