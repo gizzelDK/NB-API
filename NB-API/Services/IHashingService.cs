@@ -1,4 +1,6 @@
 ﻿using NB_API.Models;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace NB_API.Services
 {
     public interface IHashingService
@@ -6,5 +8,6 @@ namespace NB_API.Services
         Array[] CreateHash(string pw);
         bool VerifyHash(string toBeHashed, byte[] hash, byte[] salt);
         string CreateToken(Bruger bruger);
+        bool VerifyBrugerId(int id, int brugerid);
     }
 }

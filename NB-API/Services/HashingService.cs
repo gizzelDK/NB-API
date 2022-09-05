@@ -65,5 +65,13 @@ namespace NB_API.Services
 
             return jwt;
         }
+        public bool VerifyBrugerId(int id, int bruger)
+        {
+            if (id != bruger)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

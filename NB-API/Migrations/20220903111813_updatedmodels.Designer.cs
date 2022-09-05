@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NB_API.Models;
 
@@ -11,9 +12,10 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    partial class NBDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220903111813_updatedmodels")]
+    partial class updatedmodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,16 +191,11 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SamarbejdeAnmodningId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("KontaktoplysningerId")
                         .IsUnique()
                         .HasFilter("[KontaktoplysningerId] IS NOT NULL");
-
-                    b.HasIndex("SamarbejdeAnmodningId");
 
                     b.ToTable("Bryggeri");
                 });
@@ -211,7 +208,7 @@ namespace NB_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BrugerId")
+                    b.Property<int>("BrugerId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CStatus")
@@ -275,7 +272,7 @@ namespace NB_API.Migrations
                     b.Property<int>("BrugerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ForumBillede")
+                    b.Property<string>("ForumBilled")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Oprettet")
@@ -307,9 +304,12 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ØlId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OlId");
+                    b.HasIndex("ØlId");
 
                     b.ToTable("Kommentar");
                 });
@@ -346,7 +346,7 @@ namespace NB_API.Migrations
                     b.Property<int>("Postnr")
                         .HasColumnType("int");
 
-                    b.Property<string>("TelefonNr")
+                    b.Property<string>("Telefonnr")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -366,6 +366,7 @@ namespace NB_API.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LoginTime")
+                        .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasComputedColumnSql("getutcdate()");
@@ -375,65 +376,6 @@ namespace NB_API.Migrations
                     b.HasIndex("BrugerId");
 
                     b.ToTable("Login");
-                });
-
-            modelBuilder.Entity("NB_API.Models.Øl", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Aargang")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Antal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Beskrivelse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BryggeriId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeResAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Land")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Navn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OlBillede")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Procent")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Smag")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TondeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BryggeriId");
-
-                    b.ToTable("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.Opskrift", b =>
@@ -464,9 +406,12 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ØlId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OlId")
+                    b.HasIndex("ØlId")
                         .IsUnique();
 
                     b.ToTable("Opskrift");
@@ -602,9 +547,12 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ØlId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OlId");
+                    b.HasIndex("ØlId");
 
                     b.ToTable("Samarbejde");
                 });
@@ -623,12 +571,12 @@ namespace NB_API.Migrations
                     b.Property<int>("BryggerId2")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SamarbejdeId")
+                    b.Property<int?>("BryggeriId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SamarbejdeId");
+                    b.HasIndex("BryggeriId");
 
                     b.ToTable("SamarbejdeAnmodning");
                 });
@@ -716,15 +664,15 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("TagØl", b =>
                 {
-                    b.Property<int>("OlId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TagsId")
                         .HasColumnType("int");
 
-                    b.HasKey("OlId", "TagsId");
+                    b.Property<int>("ØlId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("TagsId");
+                    b.HasKey("TagsId", "ØlId");
+
+                    b.HasIndex("ØlId");
 
                     b.ToTable("TagØl");
                 });
@@ -846,10 +794,6 @@ namespace NB_API.Migrations
                         .WithOne("Bryggeri")
                         .HasForeignKey("NB_API.Models.Bryggeri", "KontaktoplysningerId");
 
-                    b.HasOne("NB_API.Models.SamarbejdeAnmodning", null)
-                        .WithMany("Bryggerier")
-                        .HasForeignKey("SamarbejdeAnmodningId");
-
                     b.Navigation("Kontaktoplysninger");
                 });
 
@@ -877,13 +821,13 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Kommentar", b =>
                 {
-                    b.HasOne("NB_API.Models.Øl", "Ol")
+                    b.HasOne("NB_API.Models.Øl", "Øl")
                         .WithMany("Kommentarer")
-                        .HasForeignKey("OlId")
+                        .HasForeignKey("ØlId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ol");
+                    b.Navigation("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.Login", b =>
@@ -897,26 +841,15 @@ namespace NB_API.Migrations
                     b.Navigation("Bruger");
                 });
 
-            modelBuilder.Entity("NB_API.Models.Øl", b =>
-                {
-                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
-                        .WithMany()
-                        .HasForeignKey("BryggeriId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bryggeri");
-                });
-
             modelBuilder.Entity("NB_API.Models.Opskrift", b =>
                 {
-                    b.HasOne("NB_API.Models.Øl", "Ol")
+                    b.HasOne("NB_API.Models.Øl", "Øl")
                         .WithOne("Bryggeprocess")
-                        .HasForeignKey("NB_API.Models.Opskrift", "OlId")
+                        .HasForeignKey("NB_API.Models.Opskrift", "ØlId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ol");
+                    b.Navigation("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.Post", b =>
@@ -928,7 +861,7 @@ namespace NB_API.Migrations
                         .IsRequired();
 
                     b.HasOne("NB_API.Models.Forum", "Forum")
-                        .WithMany("Posts")
+                        .WithMany("Post")
                         .HasForeignKey("ForumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -957,20 +890,22 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Samarbejde", b =>
                 {
-                    b.HasOne("NB_API.Models.Øl", "Ol")
+                    b.HasOne("NB_API.Models.Øl", "Øl")
                         .WithMany("Samarbejder")
-                        .HasForeignKey("OlId")
+                        .HasForeignKey("ØlId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ol");
+                    b.Navigation("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.SamarbejdeAnmodning", b =>
                 {
-                    b.HasOne("NB_API.Models.Samarbejde", null)
-                        .WithMany("SamarbejdeAnmodning")
-                        .HasForeignKey("SamarbejdeId");
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
+                        .WithMany()
+                        .HasForeignKey("BryggeriId");
+
+                    b.Navigation("Bryggeri");
                 });
 
             modelBuilder.Entity("NB_API.Models.Tag", b =>
@@ -980,17 +915,28 @@ namespace NB_API.Migrations
                         .HasForeignKey("BryggeriId");
                 });
 
-            modelBuilder.Entity("TagØl", b =>
+            modelBuilder.Entity("NB_API.Models.Øl", b =>
                 {
-                    b.HasOne("NB_API.Models.Øl", null)
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
                         .WithMany()
-                        .HasForeignKey("OlId")
+                        .HasForeignKey("BryggeriId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Bryggeri");
+                });
+
+            modelBuilder.Entity("TagØl", b =>
+                {
                     b.HasOne("NB_API.Models.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Øl", null)
+                        .WithMany()
+                        .HasForeignKey("ØlId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1009,7 +955,7 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>
                 {
-                    b.Navigation("Posts");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("NB_API.Models.Kontaktoplysninger", b =>
@@ -1024,16 +970,6 @@ namespace NB_API.Migrations
                     b.Navigation("Kommentarer");
 
                     b.Navigation("Samarbejder");
-                });
-
-            modelBuilder.Entity("NB_API.Models.Samarbejde", b =>
-                {
-                    b.Navigation("SamarbejdeAnmodning");
-                });
-
-            modelBuilder.Entity("NB_API.Models.SamarbejdeAnmodning", b =>
-                {
-                    b.Navigation("Bryggerier");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,9 +14,9 @@
         public ICollection<Bryggeri>? Follows { get; set; }
         public ICollection<Rapport>? Rapporter { get; set; }
         public ICollection<Certifikat>? Certifikats { get; set; }
+        //public ICollection<Rapport>? RapporteretAf { get; set; }
         public bool AcceptedPolicy { get; set; } = false;
         public bool Deleted { get; set; } = false;
-        
-
+        public DateTime? DeleteTime { get; set; }
     }
 }
