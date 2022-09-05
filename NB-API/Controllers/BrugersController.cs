@@ -80,7 +80,7 @@ namespace NB_API.Controllers
                 brugerDto.RolleId = bruger.RolleId;
                 brugerDto.Rolle = bruger.Rolle;
                 brugerDto.Events = bruger.Events;
-                brugerDto.CertifikatId = bruger.CertifikatId;
+                brugerDto.Certifikats = bruger.Certifikats;
 
                 return Ok(brugerDto);
             }

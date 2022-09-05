@@ -13,7 +13,7 @@
         public string Beskrivelse { get; set; }
         public Opskrift? Bryggeprocess { get; set; }
         public string? OlBillede { get; set; }
-        public DateTime Årgang { get; set; }
+        public DateTime Aargang { get; set; }
         public int? Antal { get; set; }
         public int? FlaskeAntal { get; set; }
         public int? TondeAntal { get; set; }

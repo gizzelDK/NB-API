@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NB_API.Models;
 
@@ -11,9 +12,10 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    partial class NBDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220905085022_UpdatedUserObjs")]
+    partial class UpdatedUserObjs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,12 +139,6 @@ namespace NB_API.Migrations
                     b.Property<string>("Brugernavn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CertifikatId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
@@ -300,6 +296,9 @@ namespace NB_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("OlId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
@@ -443,6 +442,9 @@ namespace NB_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("OlId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StepFive")
                         .IsRequired()
@@ -598,6 +600,9 @@ namespace NB_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("OlId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Titel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -616,12 +621,6 @@ namespace NB_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BryggerId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BryggerId2")
-                        .HasColumnType("int");
 
                     b.Property<int?>("SamarbejdeId")
                         .HasColumnType("int");
@@ -653,65 +652,6 @@ namespace NB_API.Migrations
                     b.HasIndex("BryggeriId");
 
                     b.ToTable("Tag");
-                });
-
-            modelBuilder.Entity("NB_API.Models.Øl", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("Antal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Beskrivelse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BryggeriId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeResAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Land")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Navn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OlBillede")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Procent")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Smag")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TondeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Årgang")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BryggeriId");
-
-                    b.ToTable("Øl");
                 });
 
             modelBuilder.Entity("TagØl", b =>
@@ -855,13 +795,9 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
                 {
-                    b.HasOne("NB_API.Models.Bruger", "Bruger")
+                    b.HasOne("NB_API.Models.Bruger", null)
                         .WithMany("Certifikats")
-                        .HasForeignKey("BrugerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bruger");
+                        .HasForeignKey("BrugerId");
                 });
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>
