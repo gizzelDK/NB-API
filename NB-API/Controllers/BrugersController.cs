@@ -29,118 +29,153 @@ namespace NB_API.Controllers
         }
 
         // GET: api/Brugers
-        [HttpGet]
+        //GET: protected with admin
+        [HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
-            var brugerList = await _context.Bruger.ToListAsync();
-            var dtoList = new List<BrugerDto>();
-            foreach (var i in brugerList)
+            try
             {
-                var bruger = new BrugerDto();
-                bruger.Id = i.Id;
-                bruger.Brugernavn = i.Brugernavn;
-                bruger.KontaktoplysningerId = i.KontaktoplysningerId;
-                bruger.Kontaktoplysninger = i.Kontaktoplysninger;
-                bruger.RolleId = i.RolleId;
-                bruger.Rolle = i.Rolle;
-                bruger.Events = i.Events;
-                bruger.CertifikatId = i.CertifikatId;
-                dtoList.Add(bruger);
+                var brugerList = await _context.Bruger.ToListAsync();
+                var dtoList = new List<BrugerDto>();
+                foreach (var i in brugerList)
+                {
+                    var bruger = new BrugerDto();
+                    bruger.Id = i.Id;
+                    bruger.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
+                    bruger.KontaktoplysningerId = i.KontaktoplysningerId;
+                    bruger.Kontaktoplysninger = i.Kontaktoplysninger;
+                    bruger.RolleId = i.RolleId;
+                    bruger.Rolle = i.Rolle;
+                    bruger.Events = i.Events;
+                    bruger.CertifikatId = i.CertifikatId;
+                    dtoList.Add(bruger);
+                }
+                return Ok(dtoList);
             }
-            return Ok(dtoList);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);                
+            }
+            
         }
 
         // GET: api/Brugers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Bruger>> GetBruger(int id)
         {
-            var bruger = await _context.Bruger.FindAsync(id);
-            var brugerDto = new BrugerDto();
-
-            if (bruger == null)
+            try
             {
-                return NotFound();
+                var bruger = await _context.Bruger.FindAsync(id);
+                var brugerDto = new BrugerDto();
+
+                if (bruger == null)
+                {
+                    return NotFound();
+                }
+
+                brugerDto.Id = bruger.Id;
+                brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
+                brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
+                brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
+                brugerDto.RolleId = bruger.RolleId;
+                brugerDto.Rolle = bruger.Rolle;
+                brugerDto.Events = bruger.Events;
+                brugerDto.CertifikatId = bruger.CertifikatId;
+
+                return Ok(brugerDto);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
             }
             
-            brugerDto.Id = bruger.Id;
-            brugerDto.Brugernavn = _cryptoService.DecryptString("kodetest",bruger.Brugernavn);
-            brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
-            brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
-            brugerDto.RolleId = bruger.RolleId;
-            brugerDto.Rolle = bruger.Rolle;
-            brugerDto.Events = bruger.Events;
-            brugerDto.CertifikatId = bruger.CertifikatId;
-
-            return Ok(brugerDto);
         }
 
         // PUT api/Brugere/rolle?rolle=4&id=3
         [HttpPut("rolle"), Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutBrugerRolle(int rolle, int id)
         {
-            var bruger = await _context.Bruger.FindAsync(id);
-
-            if (bruger == null)
-            {
-                return NotFound();
-            }
-            // Ændrer kun fk RolleId
-            bruger.RolleId = rolle;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BrugerExists(id))
+                var bruger = await _context.Bruger.FindAsync(id);
+
+                if (bruger == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
+                // Ændrer kun fk RolleId
+                bruger.RolleId = rolle;
 
-            return Ok();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BrugerExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+            
         }
 
         // PUT api/Brugere/pw
         [HttpPut("pw")]
         public async Task<IActionResult> PutBrugerPw(Bruger bruger, string oldPw, string newPw)
         {
-            var brugerTmp = await _context.Bruger.FindAsync(bruger.Id);
-
-            if (brugerTmp == null)
-            {
-                return NotFound();
-            }
-            if (!_hashingService.VerifyHash(oldPw, brugerTmp.PwHash, brugerTmp.PwSalt))
-            {
-                return Unauthorized("Wrong Password!");
-            }
-            var retHash = _hashingService.CreateHash(newPw);
-            brugerTmp.PwHash = (byte[])retHash[1];
-            brugerTmp.PwSalt = (byte[])retHash[0];
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BrugerExists(bruger.Id))
+                var brugerTmp = await _context.Bruger.FindAsync(bruger.Id);
+
+                if (brugerTmp == null)
                 {
                     return NotFound();
                 }
-                else
+                if (!_hashingService.VerifyHash(oldPw, brugerTmp.PwHash, brugerTmp.PwSalt))
                 {
-                    throw;
+                    return Unauthorized("Wrong Password!");
                 }
-            }
+                var retHash = _hashingService.CreateHash(newPw);
+                brugerTmp.PwHash = (byte[])retHash[1];
+                brugerTmp.PwSalt = (byte[])retHash[0];
 
-            return Ok();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BrugerExists(bruger.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+               return BadRequest(e.Message);
+            }
+           
         }
 
         // PUT: api/Brugers/5
@@ -148,30 +183,38 @@ namespace NB_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBruger(int id, Bruger bruger)
         {
-            if (id != bruger.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(bruger).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BrugerExists(id))
+                if (id != bruger.Id)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                _context.Entry(bruger).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BrugerExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
         }
 
         // POST: api/Brugere
@@ -179,67 +222,86 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Bruger>> PostBruger(BrugerDto bruger)
         {
-            var brugerlist = await _context.Bruger.ToListAsync();
-            foreach(var i in brugerlist)
+            try
             {
-                if(i.Brugernavn == bruger.Brugernavn)
+                var brugerlist = await _context.Bruger.ToListAsync();
+                foreach (var i in brugerlist)
                 {
-                    return BadRequest("Brugernavn eksisterer allerede");
+                    if (i.Brugernavn == bruger.Brugernavn)
+                    {
+                        return BadRequest("Brugernavn eksisterer allerede");
+                    }
                 }
+
+                var returBruger = new BrugerDto();
+                var nybruger = new Bruger();
+                nybruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
+                nybruger.RolleId = bruger.RolleId;
+                var retHash = _hashingService.CreateHash(bruger.Pw);
+
+                nybruger.PwHash = (byte[])retHash[1];
+                nybruger.PwSalt = (byte[])retHash[0];
+                nybruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+
+                _context.Bruger.Add(nybruger);
+                await _context.SaveChangesAsync();
+
+                returBruger.Id = nybruger.Id;
+                returBruger.Brugernavn = nybruger.Brugernavn;
+                returBruger.KontaktoplysningerId = nybruger.KontaktoplysningerId;
+                returBruger.Kontaktoplysninger = nybruger.Kontaktoplysninger;
+                returBruger.RolleId = nybruger.RolleId;
+                returBruger.Rolle = nybruger.Rolle;
+
+                return CreatedAtAction("GetBruger", new { id = nybruger.Id }, returBruger);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
             
-            var returBruger = new BrugerDto();
-            var nybruger = new Bruger();
-            nybruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
-            nybruger.RolleId = bruger.RolleId;
-            var retHash = _hashingService.CreateHash(bruger.Pw);
-            
-            nybruger.PwHash = (byte[])retHash[1];
-            nybruger.PwSalt = (byte[])retHash[0];
-            //nybruger.Brugernavn = _cryptoService.EncryptString(Encoding.Unicode.GetBytes("kode"), Encoding.Unicode.GetBytes(bruger.Brugernavn));
-
-            _context.Bruger.Add(nybruger);
-            await _context.SaveChangesAsync();
-
-            returBruger.Id = nybruger.Id;
-            returBruger.Brugernavn = nybruger.Brugernavn;
-            returBruger.KontaktoplysningerId = nybruger.KontaktoplysningerId;
-            returBruger.Kontaktoplysninger = nybruger.Kontaktoplysninger;
-            returBruger.RolleId = nybruger.RolleId;
-            returBruger.Rolle = nybruger.Rolle;
-
-            return CreatedAtAction("GetBruger", new { id = nybruger.Id }, returBruger);
         }
 
-        //virker ikke med jwt token 
-        // DELETE: api/Brugers/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteBruger(int id, string token)
-        //{
-        //    if (_context.Bruger == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (!_hashingService.VeriryBrugerId(id, token))
-        //    {
-        //        return Unauthorized("You do not have permission to Delete Users!");
-        //    }
-        //    var bruger = await _context.Bruger.FindAsync(id);
-        //    if (bruger == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (bruger.Deleted)
-        //    {
-        //        return BadRequest("User already Deleted on: " + bruger.DeleteTime);
-        //    }
-        //    bruger.Deleted = true;
-        //    bruger.DeleteTime = DateTime.Now;
-        //    //_context.Bruger.Remove(bruger);
-        //    await _context.SaveChangesAsync();
 
-        //    return Ok();
-        //}
+        //flag feature
+         //DELETE: api/Brugers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBruger(int id, BrugerDto bruger)
+        {
+            try
+            {
+                if (_context.Bruger == null)
+                {
+                    return NotFound();
+                }
+                if (!_hashingService.VerifyBrugerId(id, bruger.Id))
+                {
+                    return Unauthorized("You do not have permission to Delete Users!");
+                }
+
+                var delbruger = await _context.Bruger.FindAsync(id);
+                //bruger er nu en deleted bruger ned efter --> sætter bruger til true med et timestamp
+                if (delbruger == null)
+                {
+                    return NotFound();
+                }
+                if (delbruger.Deleted)
+                {
+                    return BadRequest("User already Deleted on: " + delbruger.DeleteTime);
+                }
+                delbruger.Deleted = true;
+                delbruger.DeleteTime = DateTime.Now;
+                //_context.Bruger.Remove(bruger);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+        }
 
         //[HttpGet("enavn/{enavn}")]
         //public async Task<ActionResult<Bruger>> GetBrugerEnavn(string enavn)
@@ -253,7 +315,7 @@ namespace NB_API.Controllers
         //                                                                        brugernavn = kontaktOplysninger.Brugernavn,
         //                                                                        id = bruger.Id
         //                                                                    }).Where(x => x.enavn == enavn).ToListAsync();
-          
+
         //    var dtoList = new List<BrugerDto>();
         //    foreach (var i in joinBrugerKontaktOplysninger)
         //    {

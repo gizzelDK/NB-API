@@ -8,6 +8,6 @@ namespace NB_API.Services
         Array[] CreateHash(string pw);
         bool VerifyHash(string toBeHashed, byte[] hash, byte[] salt);
         string CreateToken(Bruger bruger);
-        //bool VeriryBrugerId(int id, JwtSecurityToken token);
+        bool VerifyBrugerId(int id, int brugerid);
     }
 }

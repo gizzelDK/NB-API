@@ -65,13 +65,13 @@ namespace NB_API.Services
 
             return jwt;
         }
-        //public bool VeriryBrugerId(int id, string token)
-        //{
-        //    if (id.ToString() != token.Id)
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
+        public bool VerifyBrugerId(int id, int bruger)
+        {
+            if (id != bruger)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
