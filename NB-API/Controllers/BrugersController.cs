@@ -40,7 +40,7 @@ namespace NB_API.Controllers
                 bruger.RolleId = i.RolleId;
                 bruger.Rolle = i.Rolle;
                 bruger.Events = i.Events;
-                bruger.Certifikat = i.Certifikat;
+                bruger.Certifikats = i.Certifikats;
                 dtoList.Add(bruger);
             }
             return Ok(dtoList);
@@ -65,7 +65,7 @@ namespace NB_API.Controllers
             brugerDto.RolleId = bruger.RolleId;
             brugerDto.Rolle = bruger.Rolle;
             brugerDto.Events = bruger.Events;
-            brugerDto.Certifikat = bruger.Certifikat;
+            brugerDto.Certifikats = bruger.Certifikats;
 
             return Ok(brugerDto);
         }
