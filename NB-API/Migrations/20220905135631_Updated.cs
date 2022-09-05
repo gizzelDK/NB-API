@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class UpdatedUserObjs : Migration
+    public partial class Updated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,7 +73,8 @@ namespace NB_API.Migrations
                     RolleId = table.Column<int>(type: "int", nullable: false),
                     KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
                     AcceptedPolicy = table.Column<bool>(type: "bit", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

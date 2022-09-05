@@ -12,8 +12,8 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220905085022_UpdatedUserObjs")]
-    partial class UpdatedUserObjs
+    [Migration("20220905135631_Updated")]
+    partial class Updated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,6 +139,9 @@ namespace NB_API.Migrations
                     b.Property<string>("Brugernavn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
