@@ -30,7 +30,8 @@ namespace NB_API.Controllers
 
         // GET: api/Brugers
         //GET: protected with admin
-        [HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet]
+        //[HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
             try
@@ -39,16 +40,22 @@ namespace NB_API.Controllers
                 var dtoList = new List<BrugerDto>();
                 foreach (var i in brugerList)
                 {
+
+                    if (i == null || i.Deleted == true)
+                    {
+                        continue;
+                    }
+
                     var bruger = new BrugerDto();
                     bruger.Id = i.Id;
-                    bruger.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
+                    bruger.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
                     bruger.KontaktoplysningerId = i.KontaktoplysningerId;
                     bruger.Kontaktoplysninger = i.Kontaktoplysninger;
                     bruger.RolleId = i.RolleId;
                     bruger.Rolle = i.Rolle;
                     bruger.Events = i.Events;
                     bruger.Certifikats = i.Certifikats;
-                    dtoList.Add(bruger);
+                    dtoList.Add(bruger);                  
                 }
                 return Ok(dtoList);
             }
@@ -68,7 +75,7 @@ namespace NB_API.Controllers
                 var bruger = await _context.Bruger.FindAsync(id);
                 var brugerDto = new BrugerDto();
 
-                if (bruger == null)
+                if (bruger == null || bruger.Deleted == true)
                 {
                     return NotFound();
                 }
@@ -83,6 +90,8 @@ namespace NB_API.Controllers
                 brugerDto.Certifikats = bruger.Certifikats;
 
                 return Ok(brugerDto);
+
+                
             }
             catch (Exception e)
             {
