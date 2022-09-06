@@ -224,9 +224,11 @@ namespace NB_API.Controllers
         {
             try
             {
-                var brugerlist = await _context.Bruger.ToListAsync();
+                //as no tracking = ændring ikke slår igennem i DB
+                var brugerlist = await _context.Bruger.AsNoTracking().ToListAsync();
                 foreach (var i in brugerlist)
                 {
+                    i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
                     if (i.Brugernavn == bruger.Brugernavn)
                     {
                         return BadRequest("Brugernavn eksisterer allerede");

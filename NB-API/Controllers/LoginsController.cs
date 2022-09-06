@@ -16,16 +16,18 @@ namespace NB_API.Controllers
     {
         private readonly NBDBContext _context;
         private readonly IHashingService _hashingservice;
+        private ICryptoService _cryptoService;
 
         /// <summary>
         /// configurations er vores Tokens dvs. får fat i settings.jason fil
         /// </summary>
         /// <param name="context"></param>
         /// <param name="configuration"></param>
-        public LoginsController(NBDBContext context, IHashingService hashingService)
+        public LoginsController(NBDBContext context, IHashingService hashingService, ICryptoService cryptoService)
         {
             _context = context;
             _hashingservice = hashingService;
+            _cryptoService = cryptoService;
         }
 
         // GET: api/Logins
@@ -49,55 +51,57 @@ namespace NB_API.Controllers
             return login;
         }
 
-        //No Put for login 
+        //No Put and no delete for login 
 
         // POST: api/Logins
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Login>> PostLogin(LoginDto login)
         {
-            var bruger = await _context.Bruger.AsNoTracking().FirstOrDefaultAsync(b => b.Brugernavn == login.Brugernavn);
-          
-            if(bruger == null)
+            //as no tracking = ændring ikke slår igennem i DB
+            var brugerlist = await _context.Bruger.AsNoTracking().ToListAsync();
+            foreach (var i in brugerlist)
             {
-                return BadRequest("No such user was found");
+                var brugernavn = _cryptoService.decrypt(i.Brugernavn);
+                if (brugernavn == login.Brugernavn)
+                {
+
+                    if (!_hashingservice.VerifyHash(login.Pw, i.PwHash, i.PwSalt))
+                    {
+                        return Unauthorized("Wrong password");
+                    }
+                    string token = _hashingservice.CreateToken(i);
+                    var dblogin = new Login();
+                    dblogin.BrugerId = i.Id;
+                    dblogin.Bruger = i;
+                    i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
+                    /// Make sure not to create new users on login = entrystate.unchanged
+                    _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
+                    _context.Login.Add(dblogin);
+                    await _context.SaveChangesAsync();
+                    return Accepted("{ \"bearer\":\"" + token + "\"}");
+                    
+                }
+                
             }
+            return BadRequest("Brugernavn eksisterer allerede");
+
+            var bruger = await _context.Bruger.FirstOrDefaultAsync(b => b.Brugernavn == login.Brugernavn);
+          
+            
 
             if(!_hashingservice.VerifyHash(login.Pw, bruger.PwHash, bruger.PwSalt))
             {
+                
+                
+                
                 return Unauthorized("Wrong password");
             }
-            string token = _hashingservice.CreateToken(bruger);
-            var dblogin = new Login();
-            dblogin.BrugerId = bruger.Id;
-            dblogin.Bruger = bruger;
-            /// Make sure not to create new users on login
-            _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
-            _context.Login.Add(dblogin);
-            await _context.SaveChangesAsync();
-            return Accepted("{ \"bearer\":\"" + token + "\"}");
+            
 
         }
 
-        // DELETE: api/Logins/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLogin(int id)
-        {
-            if (_context.Login == null)
-            {
-                return NotFound();
-            }
-            var login = await _context.Login.FindAsync(id);
-            if (login == null)
-            {
-                return NotFound();
-            }
-
-            _context.Login.Remove(login);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+       
 
         private bool LoginExists(int id)
         {
