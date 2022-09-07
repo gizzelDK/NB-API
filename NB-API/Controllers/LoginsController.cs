@@ -71,34 +71,20 @@ namespace NB_API.Controllers
                         return Unauthorized("Wrong password");
                     }
                     string token = _hashingservice.CreateToken(i);
+                    i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
                     var dblogin = new Login();
                     dblogin.BrugerId = i.Id;
                     dblogin.Bruger = i;
-                    i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
                     /// Make sure not to create new users on login = entrystate.unchanged
                     _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
                     _context.Login.Add(dblogin);
                     await _context.SaveChangesAsync();
-                    return Accepted("{ \"bearer\":\"" + token + "\"}");
+                    return Ok("{ \"bearer\":\"" + token + "\"}");
                     
                 }
                 
             }
-            return BadRequest("Brugernavn eksisterer allerede");
-
-            var bruger = await _context.Bruger.FirstOrDefaultAsync(b => b.Brugernavn == login.Brugernavn);
-          
-            
-
-            if(!_hashingservice.VerifyHash(login.Pw, bruger.PwHash, bruger.PwSalt))
-            {
-                
-                
-                
-                return Unauthorized("Wrong password");
-            }
-            
-
+            return BadRequest("Brugernavn eksisterer ikke");
         }
 
        
