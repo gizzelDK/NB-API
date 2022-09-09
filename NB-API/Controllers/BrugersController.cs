@@ -143,22 +143,22 @@ namespace NB_API.Controllers
         }
 
         // PUT api/Brugere/pw
-        [HttpPut("pw")]
-        public async Task<IActionResult> PutBrugerPw(Bruger bruger, string oldPw, string newPw)
+        [HttpPut("pw/{id}")]
+        public async Task<IActionResult> PutBrugerPw(int id, PwDto pwDto)
         {
             try
             {
-                var brugerTmp = await _context.Bruger.FindAsync(bruger.Id);
+                var brugerTmp = await _context.Bruger.FindAsync(id);
 
                 if (brugerTmp == null)
                 {
                     return NotFound();
                 }
-                if (!_hashingService.VerifyHash(oldPw, brugerTmp.PwHash, brugerTmp.PwSalt))
+                if (!_hashingService.VerifyHash(pwDto.OldPw, brugerTmp.PwHash, brugerTmp.PwSalt))
                 {
                     return Unauthorized("Wrong Password!");
                 }
-                var retHash = _hashingService.CreateHash(newPw);
+                var retHash = _hashingService.CreateHash(pwDto.NewdPw);
                 brugerTmp.PwHash = (byte[])retHash[1];
                 brugerTmp.PwSalt = (byte[])retHash[0];
 
@@ -168,7 +168,7 @@ namespace NB_API.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrugerExists(bruger.Id))
+                    if (!BrugerExists(id))
                     {
                         return NotFound();
                     }
@@ -178,7 +178,7 @@ namespace NB_API.Controllers
                     }
                 }
 
-                return Ok();
+                return Ok("Password er skiftet");
             }
             catch (Exception e)
             {
