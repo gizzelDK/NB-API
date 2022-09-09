@@ -87,7 +87,7 @@ namespace NB_API.Controllers
                 brugerDto.RolleId = bruger.RolleId;
                 brugerDto.Rolle = bruger.Rolle;
                 brugerDto.Events = bruger.Events;
-                brugerDto.Certifikats = bruger.Certifikats;
+                brugerDto.Certifikats = await _context.Certifikat.ToListAsync();
 
                 return Ok(brugerDto);
 

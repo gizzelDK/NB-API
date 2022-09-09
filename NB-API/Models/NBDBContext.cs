@@ -19,7 +19,6 @@ namespace NB_API.Models
         public virtual DbSet<Samarbejde> Samarbejde { get; set; }
         public virtual DbSet<Certifikat> Certifikat { get; set; }
         public virtual DbSet<Bryggeri> Bryggeri { get; set; }
-        public virtual DbSet<Archive> Archive { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<SamarbejdeAnmodning> SamarbejdeAnmodning { get; set; }
         public virtual DbSet<Kommentar> Kommentar { get; set; }
