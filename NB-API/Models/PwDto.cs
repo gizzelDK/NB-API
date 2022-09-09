@@ -3,6 +3,6 @@
     public class PwDto
     {
         public string OldPw { get; set; }
-        public string NewdPw { get; set; }
+        public string NewPw { get; set; }
     }
 }

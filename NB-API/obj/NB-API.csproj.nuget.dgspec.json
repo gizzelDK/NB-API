@@ -1,26 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\.dev\\.SP\\NB-API\\NB-API\\NB-API.csproj": {}
+    "C:\\.dev\\.sp\\NB-API\\NB-API\\NB-API.csproj": {}
   },
   "projects": {
-    "C:\\.dev\\.SP\\NB-API\\NB-API\\NB-API.csproj": {
+    "C:\\.dev\\.sp\\NB-API\\NB-API\\NB-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\.dev\\.SP\\NB-API\\NB-API\\NB-API.csproj",
+        "projectUniqueName": "C:\\.dev\\.sp\\NB-API\\NB-API\\NB-API.csproj",
         "projectName": "NB-API",
-        "projectPath": "C:\\.dev\\.SP\\NB-API\\NB-API\\NB-API.csproj",
-        "packagesPath": "C:\\Users\\ftv832\\.nuget\\packages\\",
-        "outputPath": "C:\\.dev\\.SP\\NB-API\\NB-API\\obj\\",
+        "projectPath": "C:\\.dev\\.sp\\NB-API\\NB-API\\NB-API.csproj",
+        "packagesPath": "C:\\Users\\mulpe\\.nuget\\packages\\",
+        "outputPath": "C:\\.dev\\.sp\\NB-API\\NB-API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ftv832\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\mulpe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -45,6 +45,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "BCrypt.Net-Core": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.8, )"
@@ -96,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-rc.2.21505.57\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -158,7 +158,7 @@ namespace NB_API.Controllers
                 {
                     return Unauthorized("Wrong Password!");
                 }
-                var retHash = _hashingService.CreateHash(pwDto.NewdPw);
+                var retHash = _hashingService.CreateHash(pwDto.NewPw);
                 brugerTmp.PwHash = (byte[])retHash[1];
                 brugerTmp.PwSalt = (byte[])retHash[0];
 
