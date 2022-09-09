@@ -19,7 +19,7 @@
         public int? TondeAntal { get; set; }
         public int? FlaskeResAntal { get; set; }
         public ICollection<Tag>? Tags { get; set; }
-        public ICollection<Samarbejde> Samarbejder { get; set; }
-        public ICollection<Kommentar> Kommentarer { get; set; }
+        public ICollection<Samarbejde>? Samarbejder { get; set; }
+        public ICollection<Kommentar>? Kommentarer { get; set; }
     }
 }

@@ -24,11 +24,14 @@ namespace NB_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Certifikat>>> GetCertifikat()
         {
+            var certifikats = await _context.Certifikat.ToListAsync();
           if (_context.Certifikat == null)
           {
               return NotFound();
           }
-            return await _context.Certifikat.ToListAsync();
+
+            //certifikats.ForEach(c => c.Bruger = null);
+            return certifikats;
         }
 
         // GET: api/Certifikats/5
@@ -45,7 +48,7 @@ namespace NB_API.Controllers
             {
                 return NotFound();
             }
-
+           // certifikat.Bruger = null;
             return certifikat;
         }
 
@@ -91,7 +94,9 @@ namespace NB_API.Controllers
                 return BadRequest("Bruger eksistere ikke");
             }
 
-            certifikat.BrugerId = certifikat.Id;
+
+            certifikat.BrugerId = brugerId;
+            _context.Certifikat.Add(certifikat);
             await _context.SaveChangesAsync(); //ved savechanges har den et Id
            
 

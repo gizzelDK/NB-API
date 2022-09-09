@@ -12,7 +12,7 @@
         public CertifikatStatus? CStatus { get; set; } = CertifikatStatus.IkkeSendt;
         public string? CertifikatBilled { get; set; }
         public int BrugerId { get; set; }
-        public Bruger? Bruger { get; set; }
+//        public Bruger? Bruger { get; set; }
 
     }
 }

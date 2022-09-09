@@ -15,6 +15,9 @@ builder.Services.AddControllers().AddJsonOptions(
         {
             var enumConverter = new JsonStringEnumConverter();
             opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            /// Forhinder cirkulære cycles, når der hentes lister
+            opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+          //  opts.JsonSerializerOptions.PropertyNamingPolicy = null; // prevent camel case
         });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

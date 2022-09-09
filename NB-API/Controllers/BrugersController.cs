@@ -36,7 +36,7 @@ namespace NB_API.Controllers
         {
             try
             {
-                var brugerList = await _context.Bruger.ToListAsync();
+                var brugerList = await _context.Bruger.Include(x => x.Certifikats).ToListAsync();
                 var dtoList = new List<BrugerDto>();
                 foreach (var i in brugerList)
                 {
