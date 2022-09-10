@@ -178,7 +178,7 @@ namespace NB_API.Controllers
                     }
                 }
 
-                return Ok("Password er skiftet");
+                return NoContent();
             }
             catch (Exception e)
             {
