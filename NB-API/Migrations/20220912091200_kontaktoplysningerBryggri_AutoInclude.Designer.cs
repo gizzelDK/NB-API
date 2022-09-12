@@ -12,8 +12,8 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220912070422_deletebryggeriandbruger")]
-    partial class deletebryggeriandbruger
+    [Migration("20220912091200_kontaktoplysningerBryggri_AutoInclude")]
+    partial class kontaktoplysningerBryggri_AutoInclude
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

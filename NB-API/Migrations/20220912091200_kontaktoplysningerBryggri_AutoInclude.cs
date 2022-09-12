@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class deletebryggeriandbruger : Migration
+    public partial class kontaktoplysningerBryggri_AutoInclude : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -134,7 +134,7 @@ namespace NB_API.Migrations
                         column: x => x.BrugerId,
                         principalTable: "Bruger",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,13 +226,13 @@ namespace NB_API.Migrations
                         column: x => x.BrugerId,
                         principalTable: "Bruger",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Post_Forum_ForumId",
                         column: x => x.ForumId,
                         principalTable: "Forum",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Post_Post_SvarerId",
                         column: x => x.SvarerId,
@@ -484,13 +484,13 @@ namespace NB_API.Migrations
                         column: x => x.BryggerierId,
                         principalTable: "Bryggeri",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_BryggeriSamarbejde_Samarbejde_SamarbejdeId",
                         column: x => x.SamarbejdeId,
                         principalTable: "Samarbejde",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
