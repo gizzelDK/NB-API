@@ -12,8 +12,8 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220912091200_kontaktoplysningerBryggri_AutoInclude")]
-    partial class kontaktoplysningerBryggri_AutoInclude
+    [Migration("20220912122918_bryggri_olList")]
+    partial class bryggri_olList
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -874,7 +874,7 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Øl", b =>
                 {
                     b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
-                        .WithMany()
+                        .WithMany("Øl")
                         .HasForeignKey("BryggeriId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -907,6 +907,8 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Bryggeri", b =>
                 {
                     b.Navigation("Tags");
+
+                    b.Navigation("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>

@@ -9,6 +9,7 @@
         public string? Beskrivelse { get; set; }
         public string? BryggeriLogo { get; set; }
         public ICollection<Samarbejde>? Samarbejde { get; set; }
+        public ICollection<Øl>? Øl { get; set; }
         public ICollection<Tag>? Tags { get; set; }
         public ICollection<Bruger>? Followers { get; set; }
         public bool Deleted { get; set; } = false;

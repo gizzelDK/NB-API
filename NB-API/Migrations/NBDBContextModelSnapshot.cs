@@ -872,7 +872,7 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Øl", b =>
                 {
                     b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
-                        .WithMany()
+                        .WithMany("Øl")
                         .HasForeignKey("BryggeriId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -905,6 +905,8 @@ namespace NB_API.Migrations
             modelBuilder.Entity("NB_API.Models.Bryggeri", b =>
                 {
                     b.Navigation("Tags");
+
+                    b.Navigation("Øl");
                 });
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>

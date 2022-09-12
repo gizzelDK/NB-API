@@ -49,6 +49,24 @@ namespace NB_API.Controllers
             return øl;
         }
 
+        //hente øl med bryggeriId
+        [HttpGet("/bryggeri/{id}")]
+        public async Task<ActionResult<IEnumerable<Øl>>> GetØlonBryggeriId(int id)
+        {
+            if (_context.Øl == null)
+            {
+                return NotFound();
+            }
+            var øl = await _context.Øl.Where(o => o.Bryggeri.Id == id).ToListAsync();
+
+            if (øl == null)
+            {
+                return NotFound();
+            }
+
+            return øl;
+        }
+
         // PUT: api/Øl/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

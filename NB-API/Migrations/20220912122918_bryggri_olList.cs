@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class kontaktoplysningerBryggri_AutoInclude : Migration
+    public partial class bryggri_olList : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
