@@ -48,6 +48,24 @@ namespace NB_API.Controllers
 
             return kommentar;
         }
+        //---d YOU ARE HERE -----------------------------------------------------
+          // GET: api/Kommentars/øl/5
+        [HttpGet("ol/{id}")]
+        public async Task<ActionResult<IEnumerable<Kommentar>>> GetOlKommentar(int id)
+        {
+          if (_context.Kommentar == null)
+          {
+              return NotFound();
+          }
+            var kommentar = await _context.Kommentar.Where(k => k.OlId == id).ToListAsync();
+
+            if (kommentar == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(kommentar);
+        }
 
         // PUT: api/Kommentars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
