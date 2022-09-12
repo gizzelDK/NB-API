@@ -274,7 +274,6 @@ namespace NB_API.Controllers
         }
 
 
-        //flag feature
          //DELETE: api/Brugers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBruger(int id, BrugerDto bruger)
@@ -305,7 +304,7 @@ namespace NB_API.Controllers
                 //_context.Bruger.Remove(bruger);
                 await _context.SaveChangesAsync();
 
-                return Ok();
+                return NoContent(); 
             }
             catch (Exception e)
             {

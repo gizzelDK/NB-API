@@ -99,20 +99,35 @@ namespace NB_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBryggeri(int id)
         {
-            if (_context.Bryggeri == null)
+            try
             {
-                return NotFound();
+                if (_context.Bryggeri == null)
+                {
+                    return NotFound();
+                }
+                var delbryggeri = await _context.Bryggeri.FindAsync(id);
+                if (delbryggeri == null)
+                {
+                    return NotFound();
+                }
+
+                if (delbryggeri.Deleted)
+                {
+                    return BadRequest("Brewery already Deleted on: " + delbryggeri.DeleteTime);
+                }
+                delbryggeri.Deleted = true;
+                delbryggeri.DeleteTime = DateTime.Now;
+                
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+
             }
-            var bryggeri = await _context.Bryggeri.FindAsync(id);
-            if (bryggeri == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
-
-            _context.Bryggeri.Remove(bryggeri);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            
         }
 
         private bool BryggeriExists(int id)

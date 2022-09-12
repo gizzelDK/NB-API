@@ -11,5 +11,7 @@
         public ICollection<Samarbejde>? Samarbejde { get; set; }
         public ICollection<Tag>? Tags { get; set; }
         public ICollection<Bruger>? Followers { get; set; }
+        public bool Deleted { get; set; } = false;
+        public DateTime? DeleteTime { get; set; }
     }
 }
