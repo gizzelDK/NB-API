@@ -85,14 +85,19 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Kommentar>> PostKommentar(Kommentar kommentar)
         {
-          if (_context.Kommentar == null)
-          {
-              return Problem("Entity set 'NBDBContext.Kommentar'  is null.");
-          }
-            _context.Kommentar.Add(kommentar);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Kommentar.Add(kommentar);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetKommentar", new { id = kommentar.Id }, kommentar);
+                return CreatedAtAction("GetKommentar", new { id = kommentar.Id }, kommentar);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+           
         }
 
         // DELETE: api/Kommentars/5

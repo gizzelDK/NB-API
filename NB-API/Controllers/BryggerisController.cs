@@ -28,7 +28,10 @@ namespace NB_API.Controllers
           {
               return NotFound();
           }
-            return await _context.Bryggeri.ToListAsync();
+            var bryggerier = await _context.Bryggeri.ToListAsync();
+            bryggerier.ForEach(b => b.Øl = _context.Øl.Where(x => x.BryggeriId == b.Id).ToList());
+
+            return bryggerier;
         }
 
         // GET: api/Bryggeris/5

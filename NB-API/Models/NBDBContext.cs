@@ -47,10 +47,12 @@ namespace NB_API.Models
                .HasComputedColumnSql("getutcdate()")
                .ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Bruger>().Navigation(b => b.Kontaktoplysninger).AutoInclude();
-            modelBuilder.Entity<Kontaktoplysninger>().Navigation(b => b.Bryggeri).AutoInclude();
-            modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
             modelBuilder.Entity<Bruger>().Navigation(b => b.Rolle).AutoInclude();
+            modelBuilder.Entity<Kontaktoplysninger>().Navigation(b => b.Bryggeri).AutoInclude();
+            modelBuilder.Entity<Bryggeri>().Navigation(b => b.Kontaktoplysninger).AutoInclude();
             modelBuilder.Entity<Forum>().Navigation(f => f.Posts).AutoInclude();
+            modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
+            modelBuilder.Entity<Øl>().Navigation(f => f.Kommentarer).AutoInclude();
 
             OnModelCreatingPartial(modelBuilder);
         }
