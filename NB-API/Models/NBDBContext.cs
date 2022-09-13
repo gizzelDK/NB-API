@@ -1,11 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NB_API.Services;
 
 namespace NB_API.Models
 {
     public partial class NBDBContext : DbContext
     {
-        public NBDBContext(DbContextOptions<NBDBContext> options) : base(options)
+        private IHashingService _hashingService;
+        private ICryptoService _cryptoService;
+        public NBDBContext(DbContextOptions<NBDBContext> options, IHashingService hashingService, ICryptoService cryptoService) : base(options)
         {
+            _hashingService = hashingService;
+            _cryptoService = cryptoService;
         }
 
         public virtual DbSet<Kontaktoplysninger> Kontaktoplysninger { get; set; }
@@ -25,18 +30,10 @@ namespace NB_API.Models
         public virtual DbSet<Opskrift> Opskrift { get; set; }
         public virtual DbSet<Rapport> Rapport { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=UserAPI;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        //        //optionsBuilder.UseSqlServer("Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
-        //        //optionsBuilder.UseSqlServer("Data Source=MININT-AVDHD5F\\MSSQLSERVER2019;Initial Catalog=UserAPI;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        //    }
-        //} 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            IHashingService hashingService;
             modelBuilder.Entity<Rolle>().HasData(
                 new Rolle { Id = 1, Level = 0, RolleNavn = RolleNavn.AnonymBruger },
                 new Rolle { Id = 2, Level = 10, RolleNavn = RolleNavn.Bruger },
@@ -53,6 +50,17 @@ namespace NB_API.Models
             modelBuilder.Entity<Forum>().Navigation(f => f.Posts).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(f => f.Kommentarer).AutoInclude();
+            
+            Array adminSalt = _hashingService.CreateHash("admin");
+            
+            modelBuilder.Entity<Bruger>().HasData(
+                new Bruger { 
+                            Id = 1, 
+                            Brugernavn = _cryptoService.encrypt("admin"), 
+                            RolleId = 3, 
+                            PwSalt = (byte[])adminSalt.GetValue(0), 
+                            PwHash = (byte[])adminSalt.GetValue(1)
+                });
 
             OnModelCreatingPartial(modelBuilder);
         }

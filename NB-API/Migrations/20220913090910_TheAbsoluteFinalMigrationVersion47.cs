@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class theFinalMigrationVersion43 : Migration
+    public partial class TheAbsoluteFinalMigrationVersion47 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -226,7 +226,7 @@ namespace NB_API.Migrations
                         column: x => x.BrugerId,
                         principalTable: "Bruger",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Post_Forum_ForumId",
                         column: x => x.ForumId,
@@ -491,13 +491,13 @@ namespace NB_API.Migrations
                         column: x => x.BryggerierId,
                         principalTable: "Bryggeri",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_BryggeriSamarbejde_Samarbejde_SamarbejdeId",
                         column: x => x.SamarbejdeId,
                         principalTable: "Samarbejde",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -532,6 +532,11 @@ namespace NB_API.Migrations
                 table: "Rolle",
                 columns: new[] { "Id", "Level", "RolleNavn" },
                 values: new object[] { 3, 20, 20 });
+
+            migrationBuilder.InsertData(
+                table: "Bruger",
+                columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkzAwBND21uj_4JTVcwY0YtAKGqMWuKL-QVzYjcYCVgVz-yuqfLYJil1_EuOiPAqMnK3eTtZnTuPpRiUDfxlceck7TdSRQskBgi72Il5FhgHA", null, false, null, new byte[] { 60, 126, 235, 145, 53, 124, 170, 123, 235, 17, 195, 3, 3, 181, 205, 14, 76, 86, 147, 83, 180, 218, 127, 97, 181, 224, 103, 235, 115, 204, 224, 167, 135, 242, 149, 139, 98, 116, 146, 92, 215, 26, 44, 219, 30, 223, 242, 186, 26, 243, 190, 200, 12, 1, 59, 204, 219, 55, 243, 141, 3, 129, 203, 235 }, new byte[] { 45, 216, 192, 203, 235, 126, 197, 201, 32, 21, 105, 136, 12, 41, 0, 167, 50, 127, 23, 50, 64, 145, 202, 182, 51, 100, 212, 144, 147, 95, 91, 0, 120, 13, 103, 173, 214, 66, 5, 170, 230, 212, 36, 33, 225, 127, 85, 100, 23, 110, 168, 118, 133, 106, 164, 171, 146, 232, 16, 34, 180, 236, 4, 94, 118, 248, 246, 250, 149, 197, 58, 70, 130, 2, 139, 203, 82, 89, 16, 83, 230, 130, 139, 174, 52, 163, 251, 246, 196, 73, 207, 142, 207, 53, 62, 33, 79, 54, 42, 98, 165, 19, 91, 204, 153, 174, 157, 120, 227, 254, 146, 10, 34, 60, 252, 52, 117, 129, 72, 211, 195, 102, 13, 78, 5, 176, 165, 178 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",

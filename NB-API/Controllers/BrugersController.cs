@@ -80,18 +80,16 @@ namespace NB_API.Controllers
                     return NotFound();
                 }
 
-                brugerDto.Id = bruger.Id;
-                brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
-                brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
-                brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
-                brugerDto.RolleId = bruger.RolleId;
-                brugerDto.Rolle = bruger.Rolle;
-                brugerDto.Events = bruger.Events;
-                brugerDto.Certifikats = await _context.Certifikat.ToListAsync();
+                    brugerDto.Id = bruger.Id;
+                    brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
+                    brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
+                    brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
+                    brugerDto.RolleId = bruger.RolleId;
+                    brugerDto.Rolle = bruger.Rolle;
+                    brugerDto.Events = bruger.Events;
+                    brugerDto.Certifikats = await _context.Certifikat.ToListAsync();
 
-                return Ok(brugerDto);
-
-                
+                return Ok(brugerDto); 
             }
             catch (Exception e)
             {
@@ -237,10 +235,19 @@ namespace NB_API.Controllers
                 var brugerlist = await _context.Bruger.AsNoTracking().ToListAsync();
                 foreach (var i in brugerlist)
                 {
-                    i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
-                    if (i.Brugernavn == bruger.Brugernavn)
+                    try
                     {
-                        return BadRequest("Brugernavn eksisterer allerede");
+                        i.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
+                        if (i.Brugernavn == bruger.Brugernavn)
+                        {
+                            return BadRequest("Brugernavn eksisterer allerede");
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+
+                        continue;
                     }
                 }
 
