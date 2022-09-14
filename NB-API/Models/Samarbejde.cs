@@ -3,10 +3,9 @@
     public class Samarbejde
     {
         public int Id { get; set; }
-        public int OlId { get; set; }
-        public Øl? Ol { get; set; }
-        public ICollection<Bryggeri>? Bryggerier { get; set; }
+        public int BryggeriId1 { get; set; }
+        public int BryggeriId2 { get; set; }
+        public Bryggeri? Bryggeri { get; set; }
         public string Titel { get; set; }
-        public ICollection<SamarbejdeAnmodning>? SamarbejdeAnmodning { get; set; }
     }
 }
