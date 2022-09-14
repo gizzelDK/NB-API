@@ -19,7 +19,7 @@ namespace NB_API.Controllers
         {
             _context = context;
         }
-
+        // Føj deltagere
         // GET: api/Events
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetEvent()
@@ -30,7 +30,7 @@ namespace NB_API.Controllers
           }
             return await _context.Event.ToListAsync();
         }
-
+        // Føj deltagere
         // GET: api/Events/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(int id)
@@ -94,6 +94,7 @@ namespace NB_API.Controllers
 
             return CreatedAtAction("GetEvent", new { id = @event.Id }, @event);
         }
+
 
         // DELETE: api/Events/5
         [HttpDelete("{id}")]

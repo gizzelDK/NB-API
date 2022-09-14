@@ -29,6 +29,7 @@ namespace NB_API.Models
         public virtual DbSet<Kommentar> Kommentar { get; set; }
         public virtual DbSet<Opskrift> Opskrift { get; set; }
         public virtual DbSet<Rapport> Rapport { get; set; }
+        public virtual DbSet<Deltager> Deltager { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +51,8 @@ namespace NB_API.Models
             modelBuilder.Entity<Forum>().Navigation(f => f.Posts).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(f => f.Kommentarer).AutoInclude();
-            
+            modelBuilder.Entity<Deltager>().HasKey(de => de.Id);
+
             Array adminSalt = _hashingService.CreateHash("admin");
             
             modelBuilder.Entity<Bruger>().HasData(
