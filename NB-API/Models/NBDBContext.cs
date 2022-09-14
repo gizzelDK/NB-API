@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NB_API.Services;
+using NB_API.Models;
 
 namespace NB_API.Models
 {
@@ -30,6 +31,9 @@ namespace NB_API.Models
         public virtual DbSet<Opskrift> Opskrift { get; set; }
         public virtual DbSet<Rapport> Rapport { get; set; }
         public virtual DbSet<Deltager> Deltager { get; set; }
+        public virtual DbSet<ØlTags> ØlTags { get; set; }
+        public virtual DbSet<ForumTags> ForumTags { get; set; }
+        public virtual DbSet<EventTags> EventTags { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,6 +56,9 @@ namespace NB_API.Models
             modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(f => f.Kommentarer).AutoInclude();
             modelBuilder.Entity<Deltager>().HasKey(de => de.Id);
+            modelBuilder.Entity<ØlTags>().HasKey(øt => øt.Id);
+            modelBuilder.Entity<ForumTags>().HasKey(ft => ft.Id);
+            modelBuilder.Entity<EventTags>().HasKey(et => et.Id);
 
             Array adminSalt = _hashingService.CreateHash("admin");
             
@@ -68,5 +75,6 @@ namespace NB_API.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
     }
 }

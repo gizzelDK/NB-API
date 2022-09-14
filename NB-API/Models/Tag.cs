@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Navn { get; set; }
         public ICollection<Event>? Events { get; set; }
-        public ICollection<Forum>? Forum { get; set; }
-        public ICollection<Øl>? Ol { get; set; }
+        public ICollection<Forum>? Fora { get; set; }
+        public ICollection<Øl>? Øl { get; set; }
     }
 }
