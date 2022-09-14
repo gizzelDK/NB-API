@@ -12,8 +12,8 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220913090910_TheAbsoluteFinalMigrationVersion47")]
-    partial class TheAbsoluteFinalMigrationVersion47
+    [Migration("20220913222339_FinalVersion48")]
+    partial class FinalVersion48
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,21 +37,6 @@ namespace NB_API.Migrations
                     b.HasIndex("FollowsId");
 
                     b.ToTable("BrugerBryggeri");
-                });
-
-            modelBuilder.Entity("BrugerEvent", b =>
-                {
-                    b.Property<int>("DeltagereId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DeltagereId", "EventsId");
-
-                    b.HasIndex("EventsId");
-
-                    b.ToTable("BrugerEvent");
                 });
 
             modelBuilder.Entity("BryggeriSamarbejde", b =>
@@ -145,10 +130,10 @@ namespace NB_API.Migrations
                         {
                             Id = 1,
                             AcceptedPolicy = false,
-                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQkzAwBND21uj_4JTVcwY0YtAKGqMWuKL-QVzYjcYCVgVz-yuqfLYJil1_EuOiPAqMnK3eTtZnTuPpRiUDfxlceck7TdSRQskBgi72Il5FhgHA",
+                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQnGj7yTtIVywhavIJGHGCIgywifRzVGTFRH-SZ0RGWoh8C0XK8RhqRGoeVkSDyhlyHfDgl7qN8YqdIwHQEjsMH2z3fLWpItbR9C8LSG9P3N-Q",
                             Deleted = false,
-                            PwHash = new byte[] { 60, 126, 235, 145, 53, 124, 170, 123, 235, 17, 195, 3, 3, 181, 205, 14, 76, 86, 147, 83, 180, 218, 127, 97, 181, 224, 103, 235, 115, 204, 224, 167, 135, 242, 149, 139, 98, 116, 146, 92, 215, 26, 44, 219, 30, 223, 242, 186, 26, 243, 190, 200, 12, 1, 59, 204, 219, 55, 243, 141, 3, 129, 203, 235 },
-                            PwSalt = new byte[] { 45, 216, 192, 203, 235, 126, 197, 201, 32, 21, 105, 136, 12, 41, 0, 167, 50, 127, 23, 50, 64, 145, 202, 182, 51, 100, 212, 144, 147, 95, 91, 0, 120, 13, 103, 173, 214, 66, 5, 170, 230, 212, 36, 33, 225, 127, 85, 100, 23, 110, 168, 118, 133, 106, 164, 171, 146, 232, 16, 34, 180, 236, 4, 94, 118, 248, 246, 250, 149, 197, 58, 70, 130, 2, 139, 203, 82, 89, 16, 83, 230, 130, 139, 174, 52, 163, 251, 246, 196, 73, 207, 142, 207, 53, 62, 33, 79, 54, 42, 98, 165, 19, 91, 204, 153, 174, 157, 120, 227, 254, 146, 10, 34, 60, 252, 52, 117, 129, 72, 211, 195, 102, 13, 78, 5, 176, 165, 178 },
+                            PwHash = new byte[] { 73, 74, 158, 135, 93, 70, 59, 204, 124, 8, 84, 215, 173, 158, 17, 54, 119, 233, 155, 133, 39, 157, 167, 47, 89, 3, 195, 225, 95, 214, 206, 202, 115, 38, 37, 12, 65, 167, 217, 224, 187, 42, 7, 246, 91, 26, 186, 152, 103, 12, 94, 147, 118, 170, 153, 76, 122, 183, 103, 252, 216, 112, 129, 130 },
+                            PwSalt = new byte[] { 205, 168, 94, 166, 226, 213, 114, 167, 160, 205, 58, 224, 87, 247, 163, 92, 181, 60, 252, 113, 81, 143, 126, 146, 65, 171, 209, 236, 240, 22, 252, 207, 76, 238, 238, 154, 150, 61, 183, 91, 62, 21, 108, 89, 208, 189, 57, 93, 32, 191, 200, 20, 199, 94, 69, 63, 164, 13, 78, 226, 35, 52, 117, 211, 238, 18, 99, 167, 178, 0, 5, 145, 17, 174, 236, 155, 17, 254, 173, 87, 81, 132, 228, 205, 151, 169, 8, 164, 165, 239, 68, 28, 53, 82, 210, 21, 131, 223, 180, 45, 123, 125, 159, 101, 64, 75, 127, 42, 218, 53, 231, 177, 205, 167, 87, 56, 232, 221, 64, 220, 189, 253, 94, 93, 63, 133, 144, 64 },
                             RolleId = 3
                         });
                 });
@@ -216,6 +201,29 @@ namespace NB_API.Migrations
                     b.HasIndex("BrugerId");
 
                     b.ToTable("Certifikat");
+                });
+
+            modelBuilder.Entity("NB_API.Models.Deltager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BrugerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrugerId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Deltager");
                 });
 
             modelBuilder.Entity("NB_API.Models.Event", b =>
@@ -683,21 +691,6 @@ namespace NB_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BrugerEvent", b =>
-                {
-                    b.HasOne("NB_API.Models.Bruger", null)
-                        .WithMany()
-                        .HasForeignKey("DeltagereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NB_API.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BryggeriSamarbejde", b =>
                 {
                     b.HasOne("NB_API.Models.Bryggeri", null)
@@ -780,6 +773,25 @@ namespace NB_API.Migrations
                         .HasForeignKey("BrugerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("NB_API.Models.Deltager", b =>
+                {
+                    b.HasOne("NB_API.Models.Bruger", "Bruger")
+                        .WithMany("Deltager")
+                        .HasForeignKey("BrugerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Event", "Event")
+                        .WithMany("Deltagelse")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bruger");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>
@@ -925,6 +937,8 @@ namespace NB_API.Migrations
                 {
                     b.Navigation("Certifikats");
 
+                    b.Navigation("Deltager");
+
                     b.Navigation("Rapporter");
                 });
 
@@ -933,6 +947,11 @@ namespace NB_API.Migrations
                     b.Navigation("Tags");
 
                     b.Navigation("Øl");
+                });
+
+            modelBuilder.Entity("NB_API.Models.Event", b =>
+                {
+                    b.Navigation("Deltagelse");
                 });
 
             modelBuilder.Entity("NB_API.Models.Forum", b =>

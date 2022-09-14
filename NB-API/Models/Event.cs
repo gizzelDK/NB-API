@@ -10,6 +10,6 @@
         public string Lokation { get; set; }
         public string? EventBilled { get; set; }
         public ICollection<Tag>? Tags { get; set; }
-        public ICollection<Bruger>? Deltagere { get; set; }
+        public ICollection<Deltager>? Deltagelse { get; set; }
     }
 }

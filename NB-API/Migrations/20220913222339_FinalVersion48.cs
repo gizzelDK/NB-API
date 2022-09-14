@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class TheAbsoluteFinalMigrationVersion47 : Migration
+    public partial class FinalVersion48 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -93,30 +93,6 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BrugerEvent",
-                columns: table => new
-                {
-                    DeltagereId = table.Column<int>(type: "int", nullable: false),
-                    EventsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrugerEvent", x => new { x.DeltagereId, x.EventsId });
-                    table.ForeignKey(
-                        name: "FK_BrugerEvent_Bruger_DeltagereId",
-                        column: x => x.DeltagereId,
-                        principalTable: "Bruger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_BrugerEvent_Event_EventsId",
-                        column: x => x.EventsId,
-                        principalTable: "Event",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Certifikat",
                 columns: table => new
                 {
@@ -134,7 +110,33 @@ namespace NB_API.Migrations
                         column: x => x.BrugerId,
                         principalTable: "Bruger",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deltager",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrugerId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deltager", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Deltager_Bruger_BrugerId",
+                        column: x => x.BrugerId,
+                        principalTable: "Bruger",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Deltager_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -232,7 +234,7 @@ namespace NB_API.Migrations
                         column: x => x.ForumId,
                         principalTable: "Forum",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Post_Post_SvarerId",
                         column: x => x.SvarerId,
@@ -497,7 +499,7 @@ namespace NB_API.Migrations
                         column: x => x.SamarbejdeId,
                         principalTable: "Samarbejde",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -536,7 +538,7 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkzAwBND21uj_4JTVcwY0YtAKGqMWuKL-QVzYjcYCVgVz-yuqfLYJil1_EuOiPAqMnK3eTtZnTuPpRiUDfxlceck7TdSRQskBgi72Il5FhgHA", null, false, null, new byte[] { 60, 126, 235, 145, 53, 124, 170, 123, 235, 17, 195, 3, 3, 181, 205, 14, 76, 86, 147, 83, 180, 218, 127, 97, 181, 224, 103, 235, 115, 204, 224, 167, 135, 242, 149, 139, 98, 116, 146, 92, 215, 26, 44, 219, 30, 223, 242, 186, 26, 243, 190, 200, 12, 1, 59, 204, 219, 55, 243, 141, 3, 129, 203, 235 }, new byte[] { 45, 216, 192, 203, 235, 126, 197, 201, 32, 21, 105, 136, 12, 41, 0, 167, 50, 127, 23, 50, 64, 145, 202, 182, 51, 100, 212, 144, 147, 95, 91, 0, 120, 13, 103, 173, 214, 66, 5, 170, 230, 212, 36, 33, 225, 127, 85, 100, 23, 110, 168, 118, 133, 106, 164, 171, 146, 232, 16, 34, 180, 236, 4, 94, 118, 248, 246, 250, 149, 197, 58, 70, 130, 2, 139, 203, 82, 89, 16, 83, 230, 130, 139, 174, 52, 163, 251, 246, 196, 73, 207, 142, 207, 53, 62, 33, 79, 54, 42, 98, 165, 19, 91, 204, 153, 174, 157, 120, 227, 254, 146, 10, 34, 60, 252, 52, 117, 129, 72, 211, 195, 102, 13, 78, 5, 176, 165, 178 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQnGj7yTtIVywhavIJGHGCIgywifRzVGTFRH-SZ0RGWoh8C0XK8RhqRGoeVkSDyhlyHfDgl7qN8YqdIwHQEjsMH2z3fLWpItbR9C8LSG9P3N-Q", null, false, null, new byte[] { 73, 74, 158, 135, 93, 70, 59, 204, 124, 8, 84, 215, 173, 158, 17, 54, 119, 233, 155, 133, 39, 157, 167, 47, 89, 3, 195, 225, 95, 214, 206, 202, 115, 38, 37, 12, 65, 167, 217, 224, 187, 42, 7, 246, 91, 26, 186, 152, 103, 12, 94, 147, 118, 170, 153, 76, 122, 183, 103, 252, 216, 112, 129, 130 }, new byte[] { 205, 168, 94, 166, 226, 213, 114, 167, 160, 205, 58, 224, 87, 247, 163, 92, 181, 60, 252, 113, 81, 143, 126, 146, 65, 171, 209, 236, 240, 22, 252, 207, 76, 238, 238, 154, 150, 61, 183, 91, 62, 21, 108, 89, 208, 189, 57, 93, 32, 191, 200, 20, 199, 94, 69, 63, 164, 13, 78, 226, 35, 52, 117, 211, 238, 18, 99, 167, 178, 0, 5, 145, 17, 174, 236, 155, 17, 254, 173, 87, 81, 132, 228, 205, 151, 169, 8, 164, 165, 239, 68, 28, 53, 82, 210, 21, 131, 223, 180, 45, 123, 125, 159, 101, 64, 75, 127, 42, 218, 53, 231, 177, 205, 167, 87, 56, 232, 221, 64, 220, 189, 253, 94, 93, 63, 133, 144, 64 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",
@@ -552,11 +554,6 @@ namespace NB_API.Migrations
                 name: "IX_BrugerBryggeri_FollowsId",
                 table: "BrugerBryggeri",
                 column: "FollowsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BrugerEvent_EventsId",
-                table: "BrugerEvent",
-                column: "EventsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bryggeri_KontaktoplysningerId",
@@ -579,6 +576,16 @@ namespace NB_API.Migrations
                 name: "IX_Certifikat_BrugerId",
                 table: "Certifikat",
                 column: "BrugerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Deltager_BrugerId",
+                table: "Deltager",
+                column: "BrugerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Deltager_EventId",
+                table: "Deltager",
+                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventTag_TagsId",
@@ -691,13 +698,13 @@ namespace NB_API.Migrations
                 name: "BrugerBryggeri");
 
             migrationBuilder.DropTable(
-                name: "BrugerEvent");
-
-            migrationBuilder.DropTable(
                 name: "BryggeriSamarbejde");
 
             migrationBuilder.DropTable(
                 name: "Certifikat");
+
+            migrationBuilder.DropTable(
+                name: "Deltager");
 
             migrationBuilder.DropTable(
                 name: "EventTag");

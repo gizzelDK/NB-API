@@ -53,7 +53,7 @@ namespace NB_API.Controllers
                     bruger.Kontaktoplysninger = i.Kontaktoplysninger;
                     bruger.RolleId = i.RolleId;
                     bruger.Rolle = i.Rolle;
-                    bruger.Events = i.Events;
+                    bruger.Deltager = i.Deltager;
                     bruger.Certifikats = i.Certifikats;
                     dtoList.Add(bruger);                  
                 }
@@ -86,7 +86,7 @@ namespace NB_API.Controllers
                     brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
                     brugerDto.RolleId = bruger.RolleId;
                     brugerDto.Rolle = bruger.Rolle;
-                    brugerDto.Events = bruger.Events;
+                    brugerDto.Deltager = bruger.Deltager;
                     brugerDto.Certifikats = await _context.Certifikat.ToListAsync();
 
                 return Ok(brugerDto); 

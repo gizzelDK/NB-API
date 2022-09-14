@@ -10,7 +10,7 @@
         public Rolle? Rolle { get; set; }
         public int? KontaktoplysningerId { get; set; }
         public Kontaktoplysninger? Kontaktoplysninger { get; set; }
-        public ICollection<Event>? Events { get; set; }
+        public ICollection<Deltager>? Deltager { get; set; }
         public ICollection<Bryggeri>? Follows { get; set; }
         public ICollection<Rapport>? Rapporter { get; set; }
         public ICollection<Certifikat>? Certifikats { get; set; }
