@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class FinalMigrationVersion50 : Migration
+    public partial class FinalMigrationVersion53 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,7 +22,8 @@ namespace NB_API.Migrations
                     Postnr = table.Column<int>(type: "int", nullable: false),
                     By = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TelefonNr = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TelefonNr = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Offentlig = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -494,7 +495,8 @@ namespace NB_API.Migrations
                     StepTwo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepThree = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepFour = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StepFive = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StepFive = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Offentliggjort = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -552,7 +554,7 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQnt6QV9cPECmUbXiFQbn5hpp4CicUUm8j3xyWMwBXxByynk36tpQ2tH56kKw_VoxAOw05XgDoJd6yzKlgfItnOr-qUEXe4bc6fJZ8SxBEnYNg", null, false, null, new byte[] { 2, 167, 131, 12, 65, 244, 109, 233, 118, 211, 46, 143, 4, 208, 49, 135, 45, 16, 75, 253, 23, 48, 77, 69, 245, 176, 184, 127, 44, 63, 213, 127, 31, 21, 144, 232, 40, 1, 156, 125, 28, 120, 1, 76, 41, 11, 74, 208, 35, 241, 222, 254, 141, 229, 46, 13, 98, 84, 26, 249, 208, 127, 194, 41 }, new byte[] { 62, 122, 230, 229, 143, 6, 53, 64, 85, 93, 113, 182, 158, 29, 75, 32, 2, 46, 124, 69, 231, 130, 195, 67, 184, 168, 125, 25, 211, 223, 3, 56, 230, 65, 133, 3, 41, 220, 252, 96, 219, 187, 245, 145, 20, 213, 154, 61, 169, 112, 28, 29, 189, 126, 128, 233, 122, 158, 154, 190, 114, 50, 199, 28, 236, 56, 198, 212, 112, 234, 42, 151, 222, 87, 60, 166, 239, 146, 77, 176, 163, 70, 14, 247, 210, 46, 184, 230, 3, 5, 49, 5, 199, 168, 52, 10, 114, 191, 81, 173, 196, 62, 168, 130, 132, 219, 63, 69, 197, 28, 178, 162, 98, 59, 188, 10, 7, 173, 74, 185, 106, 80, 27, 232, 158, 246, 45, 102 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkc7kc2kpmMuSdaWOxFXBG-wKGvhZL9veknFpIv2tqYepN9-XtQ7Z89V_BA9ggbVz4rXxOT1eQNQ0UiN8ad2y0mrlcK2RuNuLvok5rhS1AjHA", null, false, null, new byte[] { 25, 0, 139, 238, 149, 173, 228, 235, 194, 64, 203, 189, 80, 160, 193, 243, 52, 238, 81, 209, 247, 107, 182, 53, 109, 43, 211, 125, 178, 151, 147, 208, 81, 44, 215, 116, 187, 170, 218, 195, 14, 116, 58, 99, 183, 232, 169, 214, 136, 203, 207, 171, 116, 52, 119, 67, 253, 115, 130, 89, 75, 31, 151, 242 }, new byte[] { 139, 137, 151, 175, 1, 102, 219, 156, 218, 241, 215, 106, 185, 0, 85, 227, 189, 13, 70, 243, 93, 151, 23, 67, 40, 231, 164, 45, 79, 205, 41, 116, 237, 195, 236, 217, 134, 196, 102, 17, 178, 82, 61, 255, 237, 101, 127, 123, 232, 106, 119, 243, 103, 207, 7, 108, 176, 32, 145, 123, 239, 80, 230, 220, 208, 48, 22, 23, 28, 192, 192, 125, 162, 86, 175, 200, 113, 163, 47, 29, 91, 49, 250, 20, 23, 45, 139, 101, 73, 34, 211, 35, 159, 35, 73, 188, 64, 33, 15, 133, 120, 39, 160, 164, 59, 124, 205, 101, 110, 32, 165, 164, 74, 77, 190, 179, 96, 15, 230, 191, 112, 9, 98, 110, 169, 13, 20, 76 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",

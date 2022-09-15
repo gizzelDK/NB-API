@@ -330,7 +330,7 @@ namespace NB_API.Controllers
                                                                             (kontaktOplysninger, bruger) => new
                                                                             {
                                                                                 enavn = kontaktOplysninger.Kontaktoplysninger.Enavn,
-                                                                                brugernavn = kontaktOplysninger.Brugernavn,
+                                                                                rollenavn = kontaktOplysninger.Brugernavn,
                                                                                 id = bruger.Id
                                                                             }).Where(x => x.enavn == enavn).ToListAsync();
 
