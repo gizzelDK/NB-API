@@ -10,5 +10,6 @@
         public string StepThree { get; set; }
         public string StepFour { get; set; }
         public string StepFive { get; set; }
+        public bool Offentliggjort { get; set; } = false;
     }
 }
