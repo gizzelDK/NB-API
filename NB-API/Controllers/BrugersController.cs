@@ -320,35 +320,87 @@ namespace NB_API.Controllers
            
         }
 
-        //[HttpGet("enavn/{enavn}")]
-        //public async Task<ActionResult<Bruger>> GetBrugerEnavn(string enavn)
-        //{
-        //    var joinBrugerKontaktOplysninger = await _context.Bruger.Join(_context.Kontaktoplysninger,
-        //                                                                    kontatkoplysninger => kontatkoplysninger.Id,
-        //                                                                    bruger => bruger.Id,
-        //                                                                    (kontaktOplysninger, bruger) => new
-        //                                                                    {
-        //                                                                        enavn = kontaktOplysninger.Kontaktoplysninger.Enavn,
-        //                                                                        brugernavn = kontaktOplysninger.Brugernavn,
-        //                                                                        id = bruger.Id
-        //                                                                    }).Where(x => x.enavn == enavn).ToListAsync();
+        // hent brugere med efternavn
+        [HttpGet("enavn/{enavn}")]
+        public async Task<ActionResult<Bruger>> GetBrugerEnavn(string enavn)
+        {
+            var joinBrugerKontaktOplysninger = await _context.Bruger.Join(_context.Kontaktoplysninger,
+                                                                            kontatkoplysninger => kontatkoplysninger.Id,
+                                                                            bruger => bruger.Id,
+                                                                            (kontaktOplysninger, bruger) => new
+                                                                            {
+                                                                                enavn = kontaktOplysninger.Kontaktoplysninger.Enavn,
+                                                                                brugernavn = kontaktOplysninger.Brugernavn,
+                                                                                id = bruger.Id
+                                                                            }).Where(x => x.enavn == enavn).ToListAsync();
 
-        //    var dtoList = new List<BrugerDto>();
-        //    foreach (var i in joinBrugerKontaktOplysninger)
-        //    {
-        //        var bruger = new BrugerDto();
-        //        bruger.Id = i.id;
-        //        bruger.Brugernavn = i.brugernavn;
-        //        bruger.KontaktoplysningerId = i.KontaktoplysningerId;
-        //        bruger.Kontaktoplysninger = i.Kontaktoplysninger;
-        //        bruger.RolleId = i.RolleId;
-        //        bruger.Rolle = i.Rolle;
-        //        bruger.Events = i.Events;
-        //        bruger.Certifikat = i.Certifikat;
-        //        dtoList.Add(bruger);
-        //    }
-        //    return Ok(dtoList);
-        //}
+           
+            return Ok(joinBrugerKontaktOplysninger);
+        }
+        //hente bruger med email parameter
+        // GET: api/Brugere/email/{email}
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Bruger>> GetBrugerEmail(string email)
+        {
+            var joinBrugerKontaktOplysninger = await _context.Bruger.Join(_context.Kontaktoplysninger,
+                                                                            kontaktOplysninger => kontaktOplysninger.Id,
+                                                                            bruger => bruger.Id,
+                                                                            (kontaktOplysninger, bruger) => new
+                                                                            {
+                                                                                email = kontaktOplysninger.Kontaktoplysninger.Email,
+                                                                                brugernavn = kontaktOplysninger.Brugernavn,
+                                                                                id = bruger.Id
+                                                                            }).Where(x => x.email == email).ToListAsync();
+            return Ok(joinBrugerKontaktOplysninger);
+        }
+
+        /// hente brugere med access lvl
+        [HttpGet("level/{level}")]
+        public async Task<ActionResult<Bruger>> GetBrugerRolleNavn(int level)
+        {
+            var joinBrugerRolle = await _context.Bruger.Join(_context.Rolle,
+                                                                            Rolle => Rolle.Id,
+                                                                            Bruger => Bruger.Id,
+                                                                            (Rolle, Bruger) => new
+                                                                            {
+                                                                                level = Rolle.Rolle.Level,
+                                                                                brugernavn = Rolle.Brugernavn,
+                                                                                id = Bruger.Id
+                                                                            }).Where(x => x.level == level).ToListAsync();
+            return Ok(joinBrugerRolle);
+        }
+        //hente bruger med eventsTitel parameter
+        // GET: api/Brugere/email/{email}
+        [HttpGet("titel/{titel}")]
+        public async Task<ActionResult<Bruger>> GetBrugerEventsTitel(string titel)
+        {
+            var joinBrugerEventsTitel = await _context.Bruger.Join(_context.Deltager,
+                                                                    bruger => bruger.Id,
+                                                                    deltagelse => deltagelse.BrugerId,
+                                                                    (bruger, deltagelse) => new { bruger, deltagelse })
+                                                                    .Join(_context.Event,
+                                                                    deltagelse => deltagelse.deltagelse.EventId,
+                                                                    events => events.Id,
+                                                                    (deltagelse, events) => new { deltagelse = deltagelse, events })
+                                                                    .Where(x => x.events.Titel == titel)
+                                                                    .Select(bruger => new
+                                                                    {
+                                                                        //titel = Bruger.events.Titel,
+                                                                        id = bruger.deltagelse.bruger.Id,
+                                                                        brugernavn = bruger.deltagelse.bruger.Brugernavn,
+                                                                        email = bruger.deltagelse.bruger.Kontaktoplysninger.Email,
+                                                                        enavn = bruger.deltagelse.bruger.Kontaktoplysninger.Enavn,
+                                                                        fnavn = bruger.deltagelse.bruger.Kontaktoplysninger.Fnavn,
+                                                                        adresseLinje1 = bruger.deltagelse.bruger.Kontaktoplysninger.Addresselinje1,
+                                                                        adresseLinje2 = bruger.deltagelse.bruger.Kontaktoplysninger.Addresselinje2,
+                                                                        postNr = bruger.deltagelse.bruger.Kontaktoplysninger.Postnr,
+                                                                        telefonNr = bruger.deltagelse.bruger.Kontaktoplysninger.TelefonNr,
+                                                                        by = bruger.deltagelse.bruger.Kontaktoplysninger.By
+                                                                    })
+                                                                    .ToListAsync();
+            return Ok(joinBrugerEventsTitel);
+        }
+
 
         private bool BrugerExists(int id)
         {
