@@ -93,34 +93,34 @@ namespace NB_API.Controllers
 
         // PUT: api/Deltagers/5 ----------- Modificerer man nogensinde deltagelse? Enten deltager man, eller man sleter
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDeltager(int id, Deltager deltager)
-        {
-            if (id != deltager.Id)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutDeltager(int id, Deltager deltager)
+        //{
+        //    if (id != deltager.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(deltager).State = EntityState.Modified;
+        //    _context.Entry(deltager).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DeltagerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!DeltagerExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: api/Deltagers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

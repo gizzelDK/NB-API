@@ -9,7 +9,7 @@
         public DateTime SlutDato { get; set; }
         public string Lokation { get; set; }
         public string? EventBilled { get; set; }
-        public ICollection<Tag>? Tags { get; set; }
+        public ICollection<EventTags>? Tags { get; set; }
         public ICollection<Deltager>? Deltagelse { get; set; }
     }
 }

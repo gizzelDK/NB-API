@@ -12,5 +12,6 @@
         public string Email { get; set; }
         public string? TelefonNr { get; set; }
         public Bryggeri? Bryggeri { get; set; }
+        public bool Offentlig { get; set; } = false;
     }
 }

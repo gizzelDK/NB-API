@@ -5,28 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class FinalVersion48 : Migration
+    public partial class FinalMigrationVersion53 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Event",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDato = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SlutDato = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Lokation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventBilled = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Event", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Kontaktoplysninger",
                 columns: table => new
@@ -40,7 +22,8 @@ namespace NB_API.Migrations
                     Postnr = table.Column<int>(type: "int", nullable: false),
                     By = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TelefonNr = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TelefonNr = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Offentlig = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,6 +42,29 @@ namespace NB_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rolle", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bryggeri",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
+                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BryggeriLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bryggeri", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bryggeri_Kontaktoplysninger_KontaktoplysningerId",
+                        column: x => x.KontaktoplysningerId,
+                        principalTable: "Kontaktoplysninger",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -93,6 +99,69 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SamarbejdeAnmodning",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BryggeriId1 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId2 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SamarbejdeAnmodning", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SamarbejdeAnmodning_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tag_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BrugerBryggeri",
+                columns: table => new
+                {
+                    FollowersId = table.Column<int>(type: "int", nullable: false),
+                    FollowsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BrugerBryggeri", x => new { x.FollowersId, x.FollowsId });
+                    table.ForeignKey(
+                        name: "FK_BrugerBryggeri_Bruger_FollowersId",
+                        column: x => x.FollowersId,
+                        principalTable: "Bruger",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_BrugerBryggeri_Bryggeri_FollowsId",
+                        column: x => x.FollowsId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Certifikat",
                 columns: table => new
                 {
@@ -107,55 +176,6 @@ namespace NB_API.Migrations
                     table.PrimaryKey("PK_Certifikat", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Certifikat_Bruger_BrugerId",
-                        column: x => x.BrugerId,
-                        principalTable: "Bruger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Deltager",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BrugerId = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Deltager", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Deltager_Bruger_BrugerId",
-                        column: x => x.BrugerId,
-                        principalTable: "Bruger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Deltager_Event_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Event",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Forum",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Oprettet = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ForumBillede = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrugerId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Forum", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Forum_Bruger_BrugerId",
                         column: x => x.BrugerId,
                         principalTable: "Bruger",
                         principalColumn: "Id",
@@ -207,6 +227,174 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Event",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDato = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SlutDato = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Lokation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EventBilled = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TagId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Event", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Event_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Forum",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Oprettet = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ForumBillede = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BrugerId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Forum", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Forum_Bruger_BrugerId",
+                        column: x => x.BrugerId,
+                        principalTable: "Bruger",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Forum_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Øl",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Land = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: false),
+                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Procent = table.Column<float>(type: "real", nullable: false),
+                    Smag = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OlBillede = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Aargang = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Antal = table.Column<int>(type: "int", nullable: true),
+                    FlaskeAntal = table.Column<int>(type: "int", nullable: true),
+                    TondeAntal = table.Column<int>(type: "int", nullable: true),
+                    FlaskeResAntal = table.Column<int>(type: "int", nullable: true),
+                    TagId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Øl", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Øl_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Øl_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deltager",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrugerId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deltager", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Deltager_Bruger_BrugerId",
+                        column: x => x.BrugerId,
+                        principalTable: "Bruger",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Deltager_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventTags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventTags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventTags_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_EventTags_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ForumTags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ForumId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ForumTags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ForumTags_Forum_ForumId",
+                        column: x => x.ForumId,
+                        principalTable: "Forum",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_ForumTags_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Post",
                 columns: table => new
                 {
@@ -243,98 +431,6 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BrugerBryggeri",
-                columns: table => new
-                {
-                    FollowersId = table.Column<int>(type: "int", nullable: false),
-                    FollowsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrugerBryggeri", x => new { x.FollowersId, x.FollowsId });
-                    table.ForeignKey(
-                        name: "FK_BrugerBryggeri_Bruger_FollowersId",
-                        column: x => x.FollowersId,
-                        principalTable: "Bruger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bryggeri",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
-                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BryggeriLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SamarbejdeAnmodningId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bryggeri", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bryggeri_Kontaktoplysninger_KontaktoplysningerId",
-                        column: x => x.KontaktoplysningerId,
-                        principalTable: "Kontaktoplysninger",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Øl",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Land = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BryggeriId = table.Column<int>(type: "int", nullable: false),
-                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Procent = table.Column<float>(type: "real", nullable: false),
-                    Smag = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OlBillede = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Aargang = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Antal = table.Column<int>(type: "int", nullable: true),
-                    FlaskeAntal = table.Column<int>(type: "int", nullable: true),
-                    TondeAntal = table.Column<int>(type: "int", nullable: true),
-                    FlaskeResAntal = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Øl", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Øl_Bryggeri_BryggeriId",
-                        column: x => x.BryggeriId,
-                        principalTable: "Bryggeri",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BryggeriId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tag_Bryggeri_BryggeriId",
-                        column: x => x.BryggeriId,
-                        principalTable: "Bryggeri",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Kommentar",
                 columns: table => new
                 {
@@ -363,6 +459,32 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ØlTags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ØlId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ØlTags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ØlTags_Øl_ØlId",
+                        column: x => x.ØlId,
+                        principalTable: "Øl",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_ØlTags_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Opskrift",
                 columns: table => new
                 {
@@ -373,7 +495,8 @@ namespace NB_API.Migrations
                     StepTwo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepThree = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepFour = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StepFive = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StepFive = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Offentliggjort = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -392,131 +515,24 @@ namespace NB_API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OlId = table.Column<int>(type: "int", nullable: false),
-                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BryggeriId1 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId2 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true),
+                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ØlId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Samarbejde", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Samarbejde_Øl_OlId",
-                        column: x => x.OlId,
-                        principalTable: "Øl",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventTag",
-                columns: table => new
-                {
-                    EventsId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventTag", x => new { x.EventsId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_EventTag_Event_EventsId",
-                        column: x => x.EventsId,
-                        principalTable: "Event",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_EventTag_Tag_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ForumTag",
-                columns: table => new
-                {
-                    ForumId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ForumTag", x => new { x.ForumId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_ForumTag_Forum_ForumId",
-                        column: x => x.ForumId,
-                        principalTable: "Forum",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_ForumTag_Tag_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TagØl",
-                columns: table => new
-                {
-                    OlId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TagØl", x => new { x.OlId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_TagØl_Øl_OlId",
-                        column: x => x.OlId,
-                        principalTable: "Øl",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_TagØl_Tag_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BryggeriSamarbejde",
-                columns: table => new
-                {
-                    BryggerierId = table.Column<int>(type: "int", nullable: false),
-                    SamarbejdeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BryggeriSamarbejde", x => new { x.BryggerierId, x.SamarbejdeId });
-                    table.ForeignKey(
-                        name: "FK_BryggeriSamarbejde_Bryggeri_BryggerierId",
-                        column: x => x.BryggerierId,
+                        name: "FK_Samarbejde_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
                         principalTable: "Bryggeri",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_BryggeriSamarbejde_Samarbejde_SamarbejdeId",
-                        column: x => x.SamarbejdeId,
-                        principalTable: "Samarbejde",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SamarbejdeAnmodning",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SamarbejdeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SamarbejdeAnmodning", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SamarbejdeAnmodning_Samarbejde_SamarbejdeId",
-                        column: x => x.SamarbejdeId,
-                        principalTable: "Samarbejde",
+                        name: "FK_Samarbejde_Øl_ØlId",
+                        column: x => x.ØlId,
+                        principalTable: "Øl",
                         principalColumn: "Id");
                 });
 
@@ -538,7 +554,7 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQnGj7yTtIVywhavIJGHGCIgywifRzVGTFRH-SZ0RGWoh8C0XK8RhqRGoeVkSDyhlyHfDgl7qN8YqdIwHQEjsMH2z3fLWpItbR9C8LSG9P3N-Q", null, false, null, new byte[] { 73, 74, 158, 135, 93, 70, 59, 204, 124, 8, 84, 215, 173, 158, 17, 54, 119, 233, 155, 133, 39, 157, 167, 47, 89, 3, 195, 225, 95, 214, 206, 202, 115, 38, 37, 12, 65, 167, 217, 224, 187, 42, 7, 246, 91, 26, 186, 152, 103, 12, 94, 147, 118, 170, 153, 76, 122, 183, 103, 252, 216, 112, 129, 130 }, new byte[] { 205, 168, 94, 166, 226, 213, 114, 167, 160, 205, 58, 224, 87, 247, 163, 92, 181, 60, 252, 113, 81, 143, 126, 146, 65, 171, 209, 236, 240, 22, 252, 207, 76, 238, 238, 154, 150, 61, 183, 91, 62, 21, 108, 89, 208, 189, 57, 93, 32, 191, 200, 20, 199, 94, 69, 63, 164, 13, 78, 226, 35, 52, 117, 211, 238, 18, 99, 167, 178, 0, 5, 145, 17, 174, 236, 155, 17, 254, 173, 87, 81, 132, 228, 205, 151, 169, 8, 164, 165, 239, 68, 28, 53, 82, 210, 21, 131, 223, 180, 45, 123, 125, 159, 101, 64, 75, 127, 42, 218, 53, 231, 177, 205, 167, 87, 56, 232, 221, 64, 220, 189, 253, 94, 93, 63, 133, 144, 64 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkc7kc2kpmMuSdaWOxFXBG-wKGvhZL9veknFpIv2tqYepN9-XtQ7Z89V_BA9ggbVz4rXxOT1eQNQ0UiN8ad2y0mrlcK2RuNuLvok5rhS1AjHA", null, false, null, new byte[] { 25, 0, 139, 238, 149, 173, 228, 235, 194, 64, 203, 189, 80, 160, 193, 243, 52, 238, 81, 209, 247, 107, 182, 53, 109, 43, 211, 125, 178, 151, 147, 208, 81, 44, 215, 116, 187, 170, 218, 195, 14, 116, 58, 99, 183, 232, 169, 214, 136, 203, 207, 171, 116, 52, 119, 67, 253, 115, 130, 89, 75, 31, 151, 242 }, new byte[] { 139, 137, 151, 175, 1, 102, 219, 156, 218, 241, 215, 106, 185, 0, 85, 227, 189, 13, 70, 243, 93, 151, 23, 67, 40, 231, 164, 45, 79, 205, 41, 116, 237, 195, 236, 217, 134, 196, 102, 17, 178, 82, 61, 255, 237, 101, 127, 123, 232, 106, 119, 243, 103, 207, 7, 108, 176, 32, 145, 123, 239, 80, 230, 220, 208, 48, 22, 23, 28, 192, 192, 125, 162, 86, 175, 200, 113, 163, 47, 29, 91, 49, 250, 20, 23, 45, 139, 101, 73, 34, 211, 35, 159, 35, 73, 188, 64, 33, 15, 133, 120, 39, 160, 164, 59, 124, 205, 101, 110, 32, 165, 164, 74, 77, 190, 179, 96, 15, 230, 191, 112, 9, 98, 110, 169, 13, 20, 76 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",
@@ -563,16 +579,6 @@ namespace NB_API.Migrations
                 filter: "[KontaktoplysningerId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bryggeri_SamarbejdeAnmodningId",
-                table: "Bryggeri",
-                column: "SamarbejdeAnmodningId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BryggeriSamarbejde_SamarbejdeId",
-                table: "BryggeriSamarbejde",
-                column: "SamarbejdeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Certifikat_BrugerId",
                 table: "Certifikat",
                 column: "BrugerId");
@@ -588,9 +594,19 @@ namespace NB_API.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventTag_TagsId",
-                table: "EventTag",
-                column: "TagsId");
+                name: "IX_Event_TagId",
+                table: "Event",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventTags_EventId",
+                table: "EventTags",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventTags_TagId",
+                table: "EventTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Forum_BrugerId",
@@ -598,9 +614,19 @@ namespace NB_API.Migrations
                 column: "BrugerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ForumTag_TagsId",
-                table: "ForumTag",
-                column: "TagsId");
+                name: "IX_Forum_TagId",
+                table: "Forum",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ForumTags_ForumId",
+                table: "ForumTags",
+                column: "ForumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ForumTags_TagId",
+                table: "ForumTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Kommentar_ForfatterId",
@@ -621,6 +647,21 @@ namespace NB_API.Migrations
                 name: "IX_Øl_BryggeriId",
                 table: "Øl",
                 column: "BryggeriId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Øl_TagId",
+                table: "Øl",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ØlTags_ØlId",
+                table: "ØlTags",
+                column: "ØlId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ØlTags_TagId",
+                table: "ØlTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Opskrift_OlId",
@@ -649,56 +690,30 @@ namespace NB_API.Migrations
                 column: "BrugerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Samarbejde_OlId",
+                name: "IX_Samarbejde_BryggeriId",
                 table: "Samarbejde",
-                column: "OlId");
+                column: "BryggeriId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SamarbejdeAnmodning_SamarbejdeId",
+                name: "IX_Samarbejde_ØlId",
+                table: "Samarbejde",
+                column: "ØlId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SamarbejdeAnmodning_BryggeriId",
                 table: "SamarbejdeAnmodning",
-                column: "SamarbejdeId");
+                column: "BryggeriId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tag_BryggeriId",
                 table: "Tag",
                 column: "BryggeriId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TagØl_TagsId",
-                table: "TagØl",
-                column: "TagsId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_BrugerBryggeri_Bryggeri_FollowsId",
-                table: "BrugerBryggeri",
-                column: "FollowsId",
-                principalTable: "Bryggeri",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Bryggeri_SamarbejdeAnmodning_SamarbejdeAnmodningId",
-                table: "Bryggeri",
-                column: "SamarbejdeAnmodningId",
-                principalTable: "SamarbejdeAnmodning",
-                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Bryggeri_Kontaktoplysninger_KontaktoplysningerId",
-                table: "Bryggeri");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Øl_Bryggeri_BryggeriId",
-                table: "Øl");
-
             migrationBuilder.DropTable(
                 name: "BrugerBryggeri");
-
-            migrationBuilder.DropTable(
-                name: "BryggeriSamarbejde");
 
             migrationBuilder.DropTable(
                 name: "Certifikat");
@@ -707,16 +722,19 @@ namespace NB_API.Migrations
                 name: "Deltager");
 
             migrationBuilder.DropTable(
-                name: "EventTag");
+                name: "EventTags");
 
             migrationBuilder.DropTable(
-                name: "ForumTag");
+                name: "ForumTags");
 
             migrationBuilder.DropTable(
                 name: "Kommentar");
 
             migrationBuilder.DropTable(
                 name: "Login");
+
+            migrationBuilder.DropTable(
+                name: "ØlTags");
 
             migrationBuilder.DropTable(
                 name: "Opskrift");
@@ -728,7 +746,10 @@ namespace NB_API.Migrations
                 name: "Rapport");
 
             migrationBuilder.DropTable(
-                name: "TagØl");
+                name: "Samarbejde");
+
+            migrationBuilder.DropTable(
+                name: "SamarbejdeAnmodning");
 
             migrationBuilder.DropTable(
                 name: "Event");
@@ -737,28 +758,22 @@ namespace NB_API.Migrations
                 name: "Forum");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Øl");
 
             migrationBuilder.DropTable(
                 name: "Bruger");
 
             migrationBuilder.DropTable(
-                name: "Rolle");
+                name: "Tag");
 
             migrationBuilder.DropTable(
-                name: "Kontaktoplysninger");
+                name: "Rolle");
 
             migrationBuilder.DropTable(
                 name: "Bryggeri");
 
             migrationBuilder.DropTable(
-                name: "SamarbejdeAnmodning");
-
-            migrationBuilder.DropTable(
-                name: "Samarbejde");
-
-            migrationBuilder.DropTable(
-                name: "Øl");
+                name: "Kontaktoplysninger");
         }
     }
 }
