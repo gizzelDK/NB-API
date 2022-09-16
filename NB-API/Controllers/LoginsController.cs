@@ -75,6 +75,7 @@ namespace NB_API.Controllers
                     var dblogin = new Login();
                     dblogin.BrugerId = i.Id;
                     dblogin.Bruger = i;
+                    dblogin.LoginTime = DateTime.Now;
                     /// Make sure not to create new users on login = entrystate.unchanged
                     _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
                     _context.Login.Add(dblogin);
