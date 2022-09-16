@@ -45,7 +45,8 @@ namespace NB_API.Controllers
                     {
                         continue;
                     }
-
+                    else
+                    {
                     var bruger = new BrugerDto();
                     bruger.Id = i.Id;
                     bruger.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
@@ -55,7 +56,8 @@ namespace NB_API.Controllers
                     bruger.Rolle = i.Rolle;
                     bruger.Deltager = i.Deltager;
                     bruger.Certifikats = i.Certifikats;
-                    dtoList.Add(bruger);                  
+                    dtoList.Add(bruger);
+                    }
                 }
                 return Ok(dtoList);
             }
@@ -73,12 +75,12 @@ namespace NB_API.Controllers
             try
             {
                 var bruger = await _context.Bruger.FindAsync(id);
-                var brugerDto = new BrugerDto();
 
                 if (bruger == null || bruger.Deleted == true)
                 {
                     return NotFound();
                 }
+                var brugerDto = new BrugerDto();
 
                     brugerDto.Id = bruger.Id;
                     brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
@@ -196,6 +198,7 @@ namespace NB_API.Controllers
                 {
                     return BadRequest();
                 }
+                bruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
 
                 _context.Entry(bruger).State = EntityState.Modified;
 
@@ -216,6 +219,63 @@ namespace NB_API.Controllers
                 }
 
                 return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+        }
+        // PUT: api/Brugers/Offentlighed/{id}
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("Offentlighed/{id}")]
+        public async Task<IActionResult> PutBrugerPrivacySetting(int id, bool setting)
+        {
+            try
+            {
+                var bruger = _context.Bruger.Find(id);
+                if (bruger == null)
+                {
+                    return BadRequest();
+                }
+                var kontaktoplysninger = _context.Kontaktoplysninger.Find(bruger.KontaktoplysningerId);
+                if (bruger == null)
+                {
+                    return BadRequest();
+                }
+                kontaktoplysninger.Offentlig = setting;
+
+                _context.Entry(kontaktoplysninger).State = EntityState.Modified;
+
+                 await _context.SaveChangesAsync();
+
+                    return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+        }
+         // PUT: api/Brugers/AcceptedPolicy/{BrugerId}
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("AcceptedPolicy/{id}")]
+        public async Task<IActionResult> PutBrugerAcceptedPolicy(int id, bool setting)
+        {
+            try
+            {
+                var bruger = _context.Bruger.Find(id);
+                if (bruger == null)
+                {
+                    return BadRequest();
+                }
+                bruger.AcceptedPolicy = setting;
+
+                _context.Entry(bruger).State = EntityState.Modified;
+
+                 await _context.SaveChangesAsync();
+
+                    return NoContent();
             }
             catch (Exception e)
             {
@@ -265,7 +325,7 @@ namespace NB_API.Controllers
                 await _context.SaveChangesAsync();
 
                 returBruger.Id = nybruger.Id;
-                returBruger.Brugernavn = nybruger.Brugernavn;
+                returBruger.Brugernavn = bruger.Brugernavn;
                 returBruger.KontaktoplysningerId = nybruger.KontaktoplysningerId;
                 returBruger.Kontaktoplysninger = nybruger.Kontaktoplysninger;
                 returBruger.RolleId = nybruger.RolleId;
