@@ -226,15 +226,20 @@ namespace NB_API.Controllers
             }
            
         }
-        // PUT: api/Brugers/offentlighed/{kontaktoplysningerId}
+        // PUT: api/Brugers/Offentlighed/{id}
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("Offentlighed/{id}")]
         public async Task<IActionResult> PutBrugerPrivacySetting(int id, bool setting)
         {
             try
             {
-                var kontaktoplysninger = _context.Kontaktoplysninger.Find(id);
-                if (kontaktoplysninger == null)
+                var bruger = _context.Bruger.Find(id);
+                if (bruger == null)
+                {
+                    return BadRequest();
+                }
+                var kontaktoplysninger = _context.Kontaktoplysninger.Find(bruger.KontaktoplysningerId);
+                if (bruger == null)
                 {
                     return BadRequest();
                 }
@@ -252,9 +257,9 @@ namespace NB_API.Controllers
             }
            
         }
-         // PUT: api/Brugers/AcceptedPolicy
+         // PUT: api/Brugers/AcceptedPolicy/{BrugerId}
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("AcceptedPolicy/{id}")]
         public async Task<IActionResult> PutBrugerAcceptedPolicy(int id, bool setting)
         {
             try
