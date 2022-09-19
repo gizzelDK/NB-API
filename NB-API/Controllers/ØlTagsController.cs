@@ -85,12 +85,14 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ØlTags>> PostØlTags(ØlTags ølTags)
         {
-            var tags = await _context.ØlTags.Where(o => o.TagId == ølTags.TagId && o.ØlId == ølTags.ØlId).ToListAsync();
-            if(ølTags.ØlId == null || ølTags.TagId == null)
+            bool øltExists = (_context.Øl?.Any(e => e.Id == ølTags.ØlId)).GetValueOrDefault();
+            bool tagExists = (_context.Tag?.Any(e => e.Id == ølTags.TagId)).GetValueOrDefault();
+            if (!øltExists || !tagExists)
             {
-                return BadRequest("mangler enten ølId eller tagId");
+                return BadRequest();
             }
-            if(tags != null)
+            var tags = await _context.ØlTags.Where(o => o.TagId == ølTags.TagId && o.ØlId == ølTags.ØlId).ToListAsync();
+            if(tags.Count() > 0)
             {
                 return BadRequest("Tag findes allerede:" + tags[0].Id);
             }
