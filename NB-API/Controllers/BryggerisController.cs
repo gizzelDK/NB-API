@@ -115,14 +115,8 @@ namespace NB_API.Controllers
                 {
                     return NotFound();
                 }
+                _context.Remove(delbryggeri);
 
-                if (delbryggeri.Deleted)
-                {
-                    return BadRequest("Brewery already Deleted on: " + delbryggeri.DeleteTime);
-                }
-                delbryggeri.Deleted = true;
-                delbryggeri.DeleteTime = DateTime.Now;
-                
                 await _context.SaveChangesAsync();
 
                 return NoContent();
