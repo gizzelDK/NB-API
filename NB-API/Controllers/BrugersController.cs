@@ -343,7 +343,7 @@ namespace NB_API.Controllers
 
          //DELETE: api/Brugers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBruger(int id, BrugerDto bruger)
+        public async Task<IActionResult> DeleteBruger(int id)
         {
             try
             {
@@ -351,11 +351,6 @@ namespace NB_API.Controllers
                 {
                     return NotFound();
                 }
-                if (!_hashingService.VerifyBrugerId(id, bruger.Id))
-                {
-                    return Unauthorized("You do not have permission to Delete Users!");
-                }
-
                 var delbruger = await _context.Bruger.FindAsync(id);
                 //bruger er nu en deleted bruger ned efter --> sætter bruger til true med et timestamp
                 if (delbruger == null)
