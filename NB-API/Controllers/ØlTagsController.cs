@@ -85,10 +85,16 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ØlTags>> PostØlTags(ØlTags ølTags)
         {
-          if (_context.ØlTags == null)
-          {
-              return Problem("Entity set 'NBDBContext.ØlTags'  is null.");
-          }
+            var tags = await _context.ØlTags.Where(o => o.TagId == ølTags.TagId && o.ØlId == ølTags.ØlId).ToListAsync();
+            if(ølTags.ØlId == null || ølTags.TagId == null)
+            {
+                return BadRequest("mangler enten ølId eller tagId");
+            }
+            if(tags != null)
+            {
+                return BadRequest("Tag findes allerede:" + tags[0].Id);
+            }
+
             _context.ØlTags.Add(ølTags);
             await _context.SaveChangesAsync();
 

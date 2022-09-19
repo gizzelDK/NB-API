@@ -85,13 +85,18 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Tag>> PostTag(Tag tag)
         {
-          if (_context.Tag == null)
-          {
-              return Problem("Entity set 'NBDBContext.Tag'  is null.");
-          }
-            _context.Tag.Add(tag);
-            await _context.SaveChangesAsync();
+            var taglist = await _context.Tag.Where(t => t.Navn == tag.Navn).ToListAsync();
+            if (taglist.Count() < 1)
+            {
+                _context.Tag.Add(tag);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                //returnere tagget
+                return BadRequest("Tag findes allerede:" + taglist[0].Id );
 
+            }
             return CreatedAtAction("GetTag", new { id = tag.Id }, tag);
         }
 
