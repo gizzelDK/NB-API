@@ -44,12 +44,12 @@ namespace NB_API.Controllers
           }
             var bryggeri = await _context.Bryggeri.FindAsync(id);
 
-            bryggeri.Øl = await _context.Øl.Where(o => o.BryggeriId == id).ToListAsync();
-
             if (bryggeri == null)
             {
                 return NotFound();
             }
+            bryggeri.Øl = await _context.Øl.Where(o => o.BryggeriId == id).ToListAsync();
+
 
             return bryggeri;
         }
