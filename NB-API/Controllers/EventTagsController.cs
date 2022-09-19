@@ -85,10 +85,18 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<EventTags>> PostEventTags(EventTags eventTags)
         {
-          if (_context.EventTags == null)
-          {
-              return Problem("Entity set 'NBDBContext.EventTags'  is null.");
-          }
+            bool eventExists = (_context.Event?.Any(e => e.Id == eventTags.EventId)).GetValueOrDefault();
+            bool tagExists = (_context.Tag?.Any(e => e.Id == eventTags.TagId)).GetValueOrDefault();
+            if (!eventExists || !tagExists)
+            {
+                return BadRequest();
+            }
+            var Etags = await _context.EventTags.Where(e => e.TagId == eventTags.TagId && e.EventId == eventTags.EventId).ToListAsync();
+            if (Etags.Count() > 0)
+            {
+                return BadRequest("EventTag findes allerede: " + Etags[0].Id);
+            }
+
             _context.EventTags.Add(eventTags);
             await _context.SaveChangesAsync();
 

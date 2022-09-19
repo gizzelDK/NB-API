@@ -85,14 +85,24 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ForumTags>> PostForumTags(ForumTags forumTags)
         {
-          if (_context.ForumTags == null)
-          {
-              return Problem("Entity set 'NBDBContext.ForumTags'  is null.");
-          }
+            bool forumExists = (_context.Forum?.Any(e => e.Id == forumTags.ForumId)).GetValueOrDefault();
+            bool tagExists = (_context.Tag?.Any(e => e.Id == forumTags.TagId)).GetValueOrDefault();
+            if (!forumExists || !tagExists)
+            {
+                return BadRequest();
+            }
+            var tags = await _context.ForumTags.Where(f => f.TagId == forumTags.TagId && f.ForumId == forumTags.ForumId).ToListAsync();
+            if (tags.Count() > 0)
+            {
+                return BadRequest("Tag findes allerede:" + tags[0].Id);
+            }
+
             _context.ForumTags.Add(forumTags);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetForumTags", new { id = forumTags.Id }, forumTags);
+
+            //return (_context.ForumTags?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         // DELETE: api/ForumTags/5
