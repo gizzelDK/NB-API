@@ -86,19 +86,15 @@ namespace NB_API.Controllers
         // POST: api/Certifikats
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Certifikat>> PostCertifikat(Certifikat certifikat, int brugerId)
+        public async Task<ActionResult<Certifikat>> PostCertifikat(Certifikat certifikat)
         {
-            var bruger = _context.Bruger.Find(brugerId);
+            var bruger = _context.Bruger.Find(certifikat.BrugerId);
             if (bruger == null)
             {
                 return BadRequest("Bruger eksistere ikke");
             }
-
-
-            certifikat.BrugerId = brugerId;
             _context.Certifikat.Add(certifikat);
             await _context.SaveChangesAsync(); //ved savechanges har den et Id
-           
 
             return CreatedAtAction("GetCertifikat", new { id = certifikat.Id }, certifikat);
         }
