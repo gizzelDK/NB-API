@@ -103,18 +103,18 @@ namespace NB_API.Controllers
 
         // PUT api/Brugere/rolle?rolle=4&id=3
         [HttpPut("rolle"), Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> PutBrugerRolle(int rolle, int id)
+        public async Task<IActionResult> PutBrugerRolle(int rolle, BrugerDto bruger)
         {
             try
             {
-                var bruger = await _context.Bruger.FindAsync(id);
+                var dbBruger = await _context.Bruger.FindAsync(bruger.Id);
 
-                if (bruger == null)
+                if (dbBruger == null)
                 {
                     return NotFound();
                 }
                 // Ændrer kun fk RolleId
-                bruger.RolleId = rolle;
+                dbBruger.RolleId = rolle;
 
                 try
                 {
@@ -122,7 +122,7 @@ namespace NB_API.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrugerExists(id))
+                    if (!BrugerExists(bruger.Id))
                     {
                         return NotFound();
                     }
@@ -198,15 +198,19 @@ namespace NB_API.Controllers
                 {
                     return BadRequest();
                 }
-                var dbBruger = _context.Bruger.Find(id);
-                if (dbBruger == null)
-                {
-                    return BadRequest();
-                }
-                dbBruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
-                dbBruger.RolleId = bruger.RolleId;
-                dbBruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
 
+                var dbBruger = _context.Bruger.AsNoTracking().FirstOrDefault(b => b.Id == id);
+                bruger.PwHash = (byte[])dbBruger.PwHash;
+                bruger.PwSalt = (byte[])dbBruger.PwSalt;
+                if (bruger.Brugernavn != null)
+                {
+                bruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+                }
+                else
+                {
+                    bruger.Brugernavn = dbBruger.Brugernavn;
+                }
+                bruger.RolleId = dbBruger.RolleId;
 
                 _context.Entry(dbBruger).State = EntityState.Modified;
 
