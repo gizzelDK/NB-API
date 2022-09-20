@@ -190,7 +190,7 @@ namespace NB_API.Controllers
         // PUT: api/Brugers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBruger(int id, Bruger bruger)
+        public async Task<IActionResult> PutBruger(int id, BrugerDto bruger)
         {
             try
             {
@@ -198,9 +198,17 @@ namespace NB_API.Controllers
                 {
                     return BadRequest();
                 }
-                bruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+                var dbBruger = _context.Bruger.Find(id);
+                if (dbBruger == null)
+                {
+                    return BadRequest();
+                }
+                dbBruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+                dbBruger.RolleId = bruger.RolleId;
+                dbBruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
 
-                _context.Entry(bruger).State = EntityState.Modified;
+
+                _context.Entry(dbBruger).State = EntityState.Modified;
 
                 try
                 {

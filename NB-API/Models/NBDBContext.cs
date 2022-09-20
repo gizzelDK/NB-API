@@ -44,10 +44,7 @@ namespace NB_API.Models
                 new Rolle { Id = 2, Level = 10, RolleNavn = RolleNavn.Bruger },
                 new Rolle { Id = 3, Level = 20, RolleNavn = RolleNavn.Administrator });
             // modelBuilder.Entity<Rolle>().Property(x => x.RolleNavn).HasDefaultValue(RolleNavn.AnonymBruger);
-            modelBuilder.Entity<Login>()
-               .Property(p => p.LoginTime)
-               .HasComputedColumnSql("getutcdate()")
-               .ValueGeneratedOnAddOrUpdate();
+
             modelBuilder.Entity<Bruger>().Navigation(b => b.Kontaktoplysninger).AutoInclude();
             modelBuilder.Entity<Bruger>().Navigation(b => b.Rolle).AutoInclude();
             modelBuilder.Entity<Kontaktoplysninger>().Navigation(b => b.Bryggeri).AutoInclude();
