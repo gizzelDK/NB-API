@@ -203,13 +203,12 @@ namespace NB_API.Controllers
 
                 if (bruger.Brugernavn != null)
                 {
-                bruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+                    dbBruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
                 }
-                else
+                if (bruger.KontaktoplysningerId != null)
                 {
-                    bruger.Brugernavn = dbBruger.Brugernavn;
+                dbBruger.KontaktoplysningerId = bruger.KontaktoplysningerId;
                 }
-                bruger.RolleId = dbBruger.RolleId;
 
                 _context.Entry(dbBruger).State = EntityState.Modified;
 
