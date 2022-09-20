@@ -198,7 +198,18 @@ namespace NB_API.Controllers
                 {
                     return BadRequest();
                 }
+                var dbBruger = _context.Bruger.AsNoTracking().FirstOrDefault(b => b.Id == id);
+                bruger.PwHash = (byte[])dbBruger.PwHash;
+                bruger.PwSalt = (byte[])dbBruger.PwSalt;
+                if (bruger.Brugernavn != null)
+                {
                 bruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
+                }
+                else
+                {
+                    bruger.Brugernavn = dbBruger.Brugernavn;
+                }
+                bruger.RolleId = dbBruger.RolleId;
 
                 _context.Entry(bruger).State = EntityState.Modified;
 

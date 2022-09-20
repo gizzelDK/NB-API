@@ -55,6 +55,9 @@ namespace NB_API.Models
             modelBuilder.Entity<Forum>().Navigation(f => f.Posts).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(b => b.Bryggeri).AutoInclude();
             modelBuilder.Entity<Øl>().Navigation(f => f.Kommentarer).AutoInclude();
+            modelBuilder.Entity<Øl>().Navigation(t => t.Tags).AutoInclude();
+            modelBuilder.Entity<Event>().Navigation(t => t.Tags).AutoInclude();
+            modelBuilder.Entity<Bryggeri>().Navigation(t => t.Tags).AutoInclude();
             modelBuilder.Entity<Deltager>().HasKey(de => de.Id);
             modelBuilder.Entity<ØlTags>().HasKey(øt => øt.Id);
             modelBuilder.Entity<ForumTags>().HasKey(ft => ft.Id);
