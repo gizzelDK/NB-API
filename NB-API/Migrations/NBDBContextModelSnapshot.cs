@@ -83,10 +83,10 @@ namespace NB_API.Migrations
                         {
                             Id = 1,
                             AcceptedPolicy = false,
-                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQnqOee0YJ7jaopFF1NXlcEI3l6nt6HBLsefj43eOQ9R7fQf3mQT3_iyVFrb3AT28DElMHVUo59AuZAE6wP4VR5SrpP69tEmQH_aFSje92_1dw",
+                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQlajakB4eo8mlthkplNbwq5ybezJNf8mAndz2CFGsu1CIfJ9IZJn_08lNvUssH0e6ayOWvSe5tP0UpwfcFyysQSL7I_jGN_0oK1nXD7Lwwksw",
                             Deleted = false,
-                            PwHash = new byte[] { 195, 142, 97, 125, 110, 10, 187, 89, 164, 61, 251, 126, 166, 191, 130, 211, 95, 185, 198, 195, 140, 229, 32, 245, 48, 147, 111, 52, 42, 230, 249, 233, 26, 143, 1, 245, 220, 77, 137, 80, 230, 100, 241, 176, 124, 249, 196, 17, 208, 126, 78, 162, 234, 108, 156, 116, 54, 203, 184, 31, 224, 207, 116, 179 },
-                            PwSalt = new byte[] { 198, 29, 208, 96, 249, 131, 147, 101, 28, 151, 102, 210, 236, 152, 57, 164, 205, 4, 213, 4, 165, 175, 246, 48, 141, 106, 255, 195, 211, 231, 34, 117, 57, 240, 131, 26, 238, 185, 87, 214, 6, 44, 154, 182, 78, 226, 34, 105, 203, 234, 24, 37, 233, 252, 89, 141, 63, 253, 166, 215, 223, 193, 48, 129, 235, 187, 129, 208, 18, 224, 64, 165, 42, 164, 29, 158, 155, 44, 189, 163, 249, 200, 226, 20, 239, 164, 112, 229, 77, 209, 211, 128, 205, 161, 61, 209, 172, 210, 118, 29, 165, 84, 105, 98, 3, 169, 67, 48, 229, 19, 112, 148, 34, 210, 170, 148, 214, 180, 10, 73, 7, 249, 91, 220, 55, 97, 253, 175 },
+                            PwHash = new byte[] { 72, 51, 149, 227, 137, 175, 161, 46, 36, 233, 176, 128, 168, 171, 228, 250, 156, 70, 91, 31, 85, 147, 7, 254, 5, 28, 136, 101, 188, 106, 120, 88, 123, 94, 133, 22, 221, 55, 127, 187, 46, 31, 0, 215, 63, 205, 123, 253, 249, 128, 126, 78, 52, 57, 229, 252, 169, 111, 17, 78, 127, 197, 255, 33 },
+                            PwSalt = new byte[] { 174, 242, 27, 251, 160, 44, 150, 142, 163, 137, 64, 111, 170, 176, 24, 44, 27, 73, 161, 213, 242, 168, 205, 81, 14, 222, 131, 1, 135, 62, 88, 15, 143, 215, 128, 39, 29, 154, 118, 3, 94, 136, 111, 202, 255, 187, 56, 124, 53, 137, 9, 226, 84, 204, 37, 19, 235, 7, 218, 128, 86, 158, 0, 29, 234, 63, 100, 243, 21, 236, 34, 118, 218, 204, 189, 14, 16, 123, 226, 11, 79, 156, 194, 163, 210, 142, 255, 203, 72, 218, 233, 247, 57, 18, 127, 250, 60, 49, 30, 181, 26, 201, 123, 191, 182, 113, 22, 132, 253, 90, 63, 120, 42, 22, 115, 12, 166, 114, 161, 76, 69, 5, 236, 43, 172, 189, 45, 12 },
                             RolleId = 3
                         });
                 });
@@ -125,6 +125,32 @@ namespace NB_API.Migrations
                         .HasFilter("[KontaktoplysningerId] IS NOT NULL");
 
                     b.ToTable("Bryggeri");
+                });
+
+            modelBuilder.Entity("NB_API.Models.BryggeriFollowers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BryggeriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FolloerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BryggeriId");
+
+                    b.HasIndex("FolloerId");
+
+                    b.ToTable("BryggeriFollowers");
                 });
 
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
@@ -379,9 +405,7 @@ namespace NB_API.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LoginTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasComputedColumnSql("getutcdate()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -537,9 +561,7 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Oprettet")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime?>("Oprettet")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("PostId")
@@ -755,6 +777,23 @@ namespace NB_API.Migrations
                         .HasForeignKey("NB_API.Models.Bryggeri", "KontaktoplysningerId");
 
                     b.Navigation("Kontaktoplysninger");
+                });
+
+            modelBuilder.Entity("NB_API.Models.BryggeriFollowers", b =>
+                {
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
+                        .WithMany()
+                        .HasForeignKey("BryggeriId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Bruger", "Folloer")
+                        .WithMany()
+                        .HasForeignKey("FolloerId");
+
+                    b.Navigation("Bryggeri");
+
+                    b.Navigation("Folloer");
                 });
 
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
