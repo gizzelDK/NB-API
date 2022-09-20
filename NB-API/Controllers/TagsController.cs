@@ -94,7 +94,7 @@ namespace NB_API.Controllers
             else
             {
                 //returnere tagget
-                return BadRequest("Tag findes allerede:" + taglist[0].Id );
+                return BadRequest( taglist[0] );
 
             }
             return CreatedAtAction("GetTag", new { id = tag.Id }, tag);
