@@ -102,19 +102,19 @@ namespace NB_API.Controllers
         }
 
         // PUT api/Brugere/rolle?rolle=4&id=3
-        [HttpPut("rolle"), Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> PutBrugerRolle(int rolle, int id)
+        [HttpPut("rolle")]
+        public async Task<IActionResult> PutBrugerRolle(int rolle, BrugerDto bruger)
         {
             try
             {
-                var bruger = await _context.Bruger.FindAsync(id);
+                var dbBruger = await _context.Bruger.FindAsync(bruger.Id);
 
-                if (bruger == null)
+                if (dbBruger == null)
                 {
                     return NotFound();
                 }
                 // Ændrer kun fk RolleId
-                bruger.RolleId = rolle;
+                dbBruger.RolleId = rolle;
 
                 try
                 {
@@ -122,7 +122,7 @@ namespace NB_API.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrugerExists(id))
+                    if (!BrugerExists(bruger.Id))
                     {
                         return NotFound();
                     }
