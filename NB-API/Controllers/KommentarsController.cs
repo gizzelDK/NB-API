@@ -85,6 +85,11 @@ namespace NB_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Kommentar>> PostKommentar(Kommentar kommentar)
         {
+            var kommentarList = _context.Kommentar.Where(k => k.ForfatterId == kommentar.ForfatterId && k.OlId == kommentar.OlId).ToList();
+            if (kommentarList.Count > 0)
+            {
+                return BadRequest("Kun en anmeldelse pr øl!");
+            }
             try
             {
                 _context.Kommentar.Add(kommentar);
