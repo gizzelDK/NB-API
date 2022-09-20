@@ -102,7 +102,7 @@ namespace NB_API.Controllers
         }
 
         // PUT api/Brugere/rolle?rolle=4&id=3
-        [HttpPut("rolle")]
+        [HttpPut("rolle"), Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutBrugerRolle(int rolle, BrugerDto bruger)
         {
             try
