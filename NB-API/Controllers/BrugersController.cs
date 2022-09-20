@@ -393,8 +393,9 @@ namespace NB_API.Controllers
                                                                             (kontaktOplysninger, bruger) => new
                                                                             {
                                                                                 enavn = kontaktOplysninger.Kontaktoplysninger.Enavn,
-                                                                                rollenavn = kontaktOplysninger.Brugernavn,
-                                                                                id = bruger.Id
+                                                                                rollenavn = kontaktOplysninger.Rolle.RolleNavn,
+                                                                                id = bruger.Id,
+                                                                                brugernavn=_cryptoService.decrypt(kontaktOplysninger.Brugernavn)
                                                                             }).Where(x => x.enavn == enavn).ToListAsync();
 
            
@@ -411,7 +412,7 @@ namespace NB_API.Controllers
                                                                             (kontaktOplysninger, bruger) => new
                                                                             {
                                                                                 email = kontaktOplysninger.Kontaktoplysninger.Email,
-                                                                                brugernavn = kontaktOplysninger.Brugernavn,
+                                                                                brugernavn =_cryptoService.decrypt(kontaktOplysninger.Brugernavn),
                                                                                 id = bruger.Id
                                                                             }).Where(x => x.email == email).ToListAsync();
             return Ok(joinBrugerKontaktOplysninger);
