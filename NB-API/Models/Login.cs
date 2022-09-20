@@ -6,6 +6,6 @@ namespace NB_API.Models
         public int Id { get; set; }
         public int BrugerId { get; set; }
         public Bruger? Bruger { get; set; }
-        public DateTime LoginTime { get; private set; }
+        public DateTime LoginTime { get; set; }
     }
 }

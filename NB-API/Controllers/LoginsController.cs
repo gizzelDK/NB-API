@@ -51,9 +51,9 @@ namespace NB_API.Controllers
             return login;
         }
 
-        //No Put and no delete for login 
+        /// No Put and no delete for login 
 
-        // POST: api/Logins
+        /// POST: api/Logins
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Login>> PostLogin(LoginDto login)
@@ -75,6 +75,7 @@ namespace NB_API.Controllers
                     var dblogin = new Login();
                     dblogin.BrugerId = i.Id;
                     dblogin.Bruger = i;
+                    dblogin.LoginTime = DateTime.Now;
                     /// Make sure not to create new users on login = entrystate.unchanged
                     _context.Entry(dblogin.Bruger).State = EntityState.Unchanged;
                     _context.Login.Add(dblogin);
