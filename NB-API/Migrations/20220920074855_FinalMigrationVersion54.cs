@@ -191,7 +191,7 @@ namespace NB_API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BrugerId = table.Column<int>(type: "int", nullable: false),
-                    LoginTime = table.Column<DateTime>(type: "datetime2", nullable: false, computedColumnSql: "getutcdate()")
+                    LoginTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
