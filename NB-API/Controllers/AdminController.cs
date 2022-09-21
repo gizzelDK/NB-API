@@ -17,7 +17,7 @@ namespace NB_API.Controllers
         }
 
        // [HttpDelete("Oprydning/Brugere")]
-        [HttpDelete("Oprydning/Brugere/{id}"), Authorize(Roles = "Administrator")]
+        [HttpGet("Oprydning/Brugere/{id}")]
         public async Task<IActionResult> CleanupDeletedUsers(int id)
         {
             int deleted = 0;
@@ -34,7 +34,7 @@ namespace NB_API.Controllers
                     _context.Bruger.Remove(item);
                 }
                 await _context.SaveChangesAsync();
-                return Ok("Brugere slettet\": " + deleted);
+                return Ok(deleted.ToString());
             }
             catch (Exception e)
             {
