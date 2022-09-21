@@ -16,8 +16,8 @@ namespace NB_API.Controllers
             _context = context;
         }
 
-       // [HttpDelete("Oprydning/Brugere"), Authorize(Roles = "Administrator")]
-        [HttpDelete("Oprydning/Brugere")]
+       // [HttpDelete("Oprydning/Brugere")]
+        [HttpDelete("Oprydning/Brugere"), Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CleanupDeletedUsers()
         {
             int deleted = 0;
