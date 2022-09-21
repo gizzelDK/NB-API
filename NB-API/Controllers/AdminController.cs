@@ -17,8 +17,8 @@ namespace NB_API.Controllers
         }
 
        // [HttpDelete("Oprydning/Brugere")]
-        [HttpDelete("Oprydning/Brugere"), Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> CleanupDeletedUsers()
+        [HttpDelete("Oprydning/Brugere/{id}"), Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CleanupDeletedUsers(int id)
         {
             int deleted = 0;
             var result = _context.Bruger.Where(b => b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date ).ToList();
