@@ -91,7 +91,10 @@ namespace NB_API.Controllers
                     brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
                     brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
                     brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
+                if (bruger.Kontaktoplysninger != null)
+                {
                     brugerDto.Kontaktoplysninger.Email = _cryptoService.decrypt(bruger.Kontaktoplysninger.Email);
+                }
                     brugerDto.RolleId = bruger.RolleId;
                     brugerDto.Rolle = bruger.Rolle;
                     brugerDto.Deltager = bruger.Deltager;
