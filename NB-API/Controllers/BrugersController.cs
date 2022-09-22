@@ -30,8 +30,8 @@ namespace NB_API.Controllers
 
         // GET: api/Brugers
         //GET: protected with admin
-        [HttpGet]
-        //[HttpGet, Authorize(Roles = "Administrator")]
+        //[HttpGet]
+        [HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
             try
@@ -100,9 +100,10 @@ namespace NB_API.Controllers
             
         }
 
-        //PUT api/Brugere/rolle? rolle = 4 & id = 3
-       [HttpPut("rolle"), Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> PutBrugerRolle(int rolle, BrugerDto bruger)
+
+        // PUT api/Brugere/rolle?rolle=4&id=3
+        [HttpPut("rolle/{id}"), Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> PutBrugerRolle(int id, BrugerDto bruger)
         {
             try
             {
@@ -113,7 +114,7 @@ namespace NB_API.Controllers
                     return NotFound();
                 }
                 // Ændrer kun fk RolleId
-                dbBruger.RolleId = rolle;
+                dbBruger.RolleId = id;
 
                 try
                 {

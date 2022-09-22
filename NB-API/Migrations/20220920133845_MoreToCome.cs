@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class FinalMigrationVersion54 : Migration
+    public partial class MoreToCome : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,30 +45,6 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bryggeri",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
-                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BryggeriLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bryggeri", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bryggeri_Kontaktoplysninger_KontaktoplysningerId",
-                        column: x => x.KontaktoplysningerId,
-                        principalTable: "Kontaktoplysninger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Bruger",
                 columns: table => new
                 {
@@ -101,66 +77,32 @@ namespace NB_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SamarbejdeAnmodning",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BryggeriId1 = table.Column<int>(type: "int", nullable: false),
-                    BryggeriId2 = table.Column<int>(type: "int", nullable: false),
-                    BryggeriId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SamarbejdeAnmodning", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SamarbejdeAnmodning_Bryggeri_BryggeriId",
-                        column: x => x.BryggeriId,
-                        principalTable: "Bryggeri",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "Bryggeri",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BryggeriId = table.Column<int>(type: "int", nullable: true)
+                    KontaktoplysningerId = table.Column<int>(type: "int", nullable: true),
+                    Beskrivelse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BryggeriLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BrugerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Bryggeri", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tag_Bryggeri_BryggeriId",
-                        column: x => x.BryggeriId,
-                        principalTable: "Bryggeri",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BrugerBryggeri",
-                columns: table => new
-                {
-                    FollowersId = table.Column<int>(type: "int", nullable: false),
-                    FollowsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrugerBryggeri", x => new { x.FollowersId, x.FollowsId });
-                    table.ForeignKey(
-                        name: "FK_BrugerBryggeri_Bruger_FollowersId",
-                        column: x => x.FollowersId,
+                        name: "FK_Bryggeri_Bruger_BrugerId",
+                        column: x => x.BrugerId,
                         principalTable: "Bruger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_BrugerBryggeri_Bryggeri_FollowsId",
-                        column: x => x.FollowsId,
-                        principalTable: "Bryggeri",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        name: "FK_Bryggeri_Kontaktoplysninger_KontaktoplysningerId",
+                        column: x => x.KontaktoplysningerId,
+                        principalTable: "Kontaktoplysninger",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -226,6 +168,71 @@ namespace NB_API.Migrations
                         principalTable: "Bruger",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BryggeriFollowers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FollowerId = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: false),
+                    FolloerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BryggeriFollowers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BryggeriFollowers_Bruger_FolloerId",
+                        column: x => x.FolloerId,
+                        principalTable: "Bruger",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BryggeriFollowers_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SamarbejdeAnmodning",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BryggeriId1 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId2 = table.Column<int>(type: "int", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SamarbejdeAnmodning", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SamarbejdeAnmodning_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Navn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tag_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -405,7 +412,7 @@ namespace NB_API.Migrations
                     BrugerId = table.Column<int>(type: "int", nullable: false),
                     Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Indhold = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Oprettet = table.Column<DateTime>(type: "datetime2", rowVersion: true, nullable: false),
+                    Oprettet = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PostId = table.Column<int>(type: "int", nullable: true),
                     SvarerId = table.Column<int>(type: "int", nullable: true),
                     ForumId = table.Column<int>(type: "int", nullable: false)
@@ -556,7 +563,7 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQnqOee0YJ7jaopFF1NXlcEI3l6nt6HBLsefj43eOQ9R7fQf3mQT3_iyVFrb3AT28DElMHVUo59AuZAE6wP4VR5SrpP69tEmQH_aFSje92_1dw", null, false, null, new byte[] { 195, 142, 97, 125, 110, 10, 187, 89, 164, 61, 251, 126, 166, 191, 130, 211, 95, 185, 198, 195, 140, 229, 32, 245, 48, 147, 111, 52, 42, 230, 249, 233, 26, 143, 1, 245, 220, 77, 137, 80, 230, 100, 241, 176, 124, 249, 196, 17, 208, 126, 78, 162, 234, 108, 156, 116, 54, 203, 184, 31, 224, 207, 116, 179 }, new byte[] { 198, 29, 208, 96, 249, 131, 147, 101, 28, 151, 102, 210, 236, 152, 57, 164, 205, 4, 213, 4, 165, 175, 246, 48, 141, 106, 255, 195, 211, 231, 34, 117, 57, 240, 131, 26, 238, 185, 87, 214, 6, 44, 154, 182, 78, 226, 34, 105, 203, 234, 24, 37, 233, 252, 89, 141, 63, 253, 166, 215, 223, 193, 48, 129, 235, 187, 129, 208, 18, 224, 64, 165, 42, 164, 29, 158, 155, 44, 189, 163, 249, 200, 226, 20, 239, 164, 112, 229, 77, 209, 211, 128, 205, 161, 61, 209, 172, 210, 118, 29, 165, 84, 105, 98, 3, 169, 67, 48, 229, 19, 112, 148, 34, 210, 170, 148, 214, 180, 10, 73, 7, 249, 91, 220, 55, 97, 253, 175 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQl0mZGbGt2XE7bJLchEFM8KX7ydpjUXqBXGZVm6GTxKCFPR9z2Ugz6jhaZtlp8QPLNou5WEWaZse1xNcKjqdds4o0vQXucLQRNg3VjZ0VHOMA", null, false, null, new byte[] { 218, 15, 96, 47, 72, 244, 151, 153, 217, 42, 159, 246, 17, 158, 161, 188, 29, 224, 186, 116, 117, 251, 106, 113, 85, 77, 140, 2, 151, 181, 93, 197, 199, 85, 1, 121, 55, 202, 180, 25, 225, 206, 165, 117, 122, 172, 169, 64, 110, 163, 196, 71, 114, 160, 115, 118, 141, 178, 69, 218, 21, 56, 224, 46 }, new byte[] { 15, 93, 87, 188, 142, 23, 183, 247, 37, 172, 133, 86, 187, 230, 156, 226, 250, 94, 98, 194, 186, 53, 191, 125, 92, 158, 162, 89, 187, 19, 182, 32, 22, 229, 135, 142, 191, 209, 13, 103, 90, 150, 112, 173, 0, 28, 170, 10, 3, 57, 82, 101, 114, 57, 210, 204, 115, 89, 86, 2, 167, 245, 232, 212, 107, 244, 58, 96, 233, 49, 250, 127, 22, 218, 181, 218, 225, 56, 67, 235, 127, 127, 255, 254, 73, 178, 247, 111, 16, 24, 54, 240, 240, 128, 209, 24, 251, 37, 139, 210, 92, 153, 175, 205, 254, 117, 239, 89, 119, 111, 35, 48, 47, 110, 158, 90, 206, 113, 40, 23, 56, 211, 236, 12, 220, 1, 35, 10 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",
@@ -569,9 +576,9 @@ namespace NB_API.Migrations
                 column: "RolleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BrugerBryggeri_FollowsId",
-                table: "BrugerBryggeri",
-                column: "FollowsId");
+                name: "IX_Bryggeri_BrugerId",
+                table: "Bryggeri",
+                column: "BrugerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bryggeri_KontaktoplysningerId",
@@ -579,6 +586,16 @@ namespace NB_API.Migrations
                 column: "KontaktoplysningerId",
                 unique: true,
                 filter: "[KontaktoplysningerId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BryggeriFollowers_BryggeriId",
+                table: "BryggeriFollowers",
+                column: "BryggeriId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BryggeriFollowers_FolloerId",
+                table: "BryggeriFollowers",
+                column: "FolloerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Certifikat_BrugerId",
@@ -715,7 +732,7 @@ namespace NB_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BrugerBryggeri");
+                name: "BryggeriFollowers");
 
             migrationBuilder.DropTable(
                 name: "Certifikat");
@@ -763,19 +780,19 @@ namespace NB_API.Migrations
                 name: "Øl");
 
             migrationBuilder.DropTable(
-                name: "Bruger");
-
-            migrationBuilder.DropTable(
                 name: "Tag");
-
-            migrationBuilder.DropTable(
-                name: "Rolle");
 
             migrationBuilder.DropTable(
                 name: "Bryggeri");
 
             migrationBuilder.DropTable(
+                name: "Bruger");
+
+            migrationBuilder.DropTable(
                 name: "Kontaktoplysninger");
+
+            migrationBuilder.DropTable(
+                name: "Rolle");
         }
     }
 }
