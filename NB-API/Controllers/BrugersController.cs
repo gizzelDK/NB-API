@@ -40,7 +40,6 @@ namespace NB_API.Controllers
                 var dtoList = new List<BrugerDto>();
                 foreach (var i in brugerList)
                 {
-
                     if (i == null || i.Deleted == true)
                     {
                         continue;
@@ -49,9 +48,9 @@ namespace NB_API.Controllers
                     {
                     var bruger = new BrugerDto();
                     bruger.Id = i.Id;
-                    bruger.Brugernavn = _cryptoService.decrypt(i.Brugernavn);
+                    bruger.Brugernavn = _cryptoService.decrypt(i.Brugernavn);                  
                     bruger.KontaktoplysningerId = i.KontaktoplysningerId;
-                    bruger.Kontaktoplysninger = i.Kontaktoplysninger;
+                        bruger.Kontaktoplysninger = i.Kontaktoplysninger;
                     bruger.RolleId = i.RolleId;
                     bruger.Rolle = i.Rolle;
                     bruger.Deltager = i.Deltager;
@@ -101,6 +100,7 @@ namespace NB_API.Controllers
             
         }
 
+
         // PUT api/Brugere/rolle?rolle=4&id=3
         [HttpPut("rolle/{id}"), Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutBrugerRolle(int id, BrugerDto bruger)
@@ -139,7 +139,7 @@ namespace NB_API.Controllers
 
                 return BadRequest(e.Message);
             }
-            
+
         }
 
         // PUT api/Brugere/pw
@@ -312,11 +312,9 @@ namespace NB_API.Controllers
                         {
                             return BadRequest("Brugernavn eksisterer allerede");
                         }
-
                     }
                     catch (Exception)
                     {
-
                         continue;
                     }
                 }
@@ -330,7 +328,6 @@ namespace NB_API.Controllers
                 nybruger.PwHash = (byte[])retHash[1];
                 nybruger.PwSalt = (byte[])retHash[0];
                 nybruger.Brugernavn = _cryptoService.encrypt(bruger.Brugernavn);
-
                 _context.Bruger.Add(nybruger);
                 await _context.SaveChangesAsync();
 
@@ -430,7 +427,7 @@ namespace NB_API.Controllers
                                                                             (Rolle, Bruger) => new
                                                                             {
                                                                                 level = Rolle.Rolle.Level,
-                                                                                brugernavn = Rolle.Brugernavn,
+                                                                                brugernavn = _cryptoService.decrypt(Rolle.Brugernavn),
                                                                                 id = Bruger.Id
                                                                             }).Where(x => x.level == level).ToListAsync();
             return Ok(joinBrugerRolle);
@@ -466,7 +463,6 @@ namespace NB_API.Controllers
                                                                     .ToListAsync();
             return Ok(joinBrugerEventsTitel);
         }
-
 
         private bool BrugerExists(int id)
         {
