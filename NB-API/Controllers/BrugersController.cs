@@ -32,7 +32,7 @@ namespace NB_API.Controllers
         //GET: protected with admin
         //[HttpGet]
         [HttpGet]
-        //[HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
             try
