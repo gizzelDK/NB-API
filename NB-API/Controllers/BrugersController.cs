@@ -31,7 +31,8 @@ namespace NB_API.Controllers
         // GET: api/Brugers
         //GET: protected with admin
         //[HttpGet]
-        [HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet]
+        //[HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
             try
@@ -50,7 +51,11 @@ namespace NB_API.Controllers
                     bruger.Id = i.Id;
                     bruger.Brugernavn = _cryptoService.decrypt(i.Brugernavn);                  
                     bruger.KontaktoplysningerId = i.KontaktoplysningerId;
-                        bruger.Kontaktoplysninger = i.Kontaktoplysninger;
+                    bruger.Kontaktoplysninger = i.Kontaktoplysninger;
+                    if(bruger.Kontaktoplysninger != null)
+                    {
+                       bruger.Kontaktoplysninger.Email = _cryptoService.decrypt(i.Kontaktoplysninger.Email);
+                    }              
                     bruger.RolleId = i.RolleId;
                     bruger.Rolle = i.Rolle;
                     bruger.Deltager = i.Deltager;
@@ -75,6 +80,7 @@ namespace NB_API.Controllers
             {
                 var bruger = await _context.Bruger.FindAsync(id);
 
+
                 if (bruger == null || bruger.Deleted == true)
                 {
                     return NotFound();
@@ -85,6 +91,7 @@ namespace NB_API.Controllers
                     brugerDto.Brugernavn = _cryptoService.decrypt(bruger.Brugernavn);
                     brugerDto.KontaktoplysningerId = bruger.KontaktoplysningerId;
                     brugerDto.Kontaktoplysninger = bruger.Kontaktoplysninger;
+                    brugerDto.Kontaktoplysninger.Email = _cryptoService.decrypt(bruger.Kontaktoplysninger.Email);
                     brugerDto.RolleId = bruger.RolleId;
                     brugerDto.Rolle = bruger.Rolle;
                     brugerDto.Deltager = bruger.Deltager;
