@@ -34,6 +34,7 @@ namespace NB_API.Models
         public virtual DbSet<ØlTags> ØlTags { get; set; }
         public virtual DbSet<ForumTags> ForumTags { get; set; }
         public virtual DbSet<EventTags> EventTags { get; set; }
+        public virtual DbSet<BryggeriFollowers> BryggeriFollowers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -59,6 +60,7 @@ namespace NB_API.Models
             modelBuilder.Entity<ØlTags>().HasKey(øt => øt.Id);
             modelBuilder.Entity<ForumTags>().HasKey(ft => ft.Id);
             modelBuilder.Entity<EventTags>().HasKey(et => et.Id);
+            modelBuilder.Entity<BryggeriFollowers>().HasKey(bf => bf.Id);
 
             Array adminSalt = _hashingService.CreateHash("admin");
             

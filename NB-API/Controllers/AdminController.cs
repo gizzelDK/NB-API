@@ -16,30 +16,32 @@ namespace NB_API.Controllers
             _context = context;
         }
 
-       // [HttpDelete("Oprydning/Brugere"), Authorize(Roles = "Administrator")]
-        [HttpDelete("Oprydning/Brugere")]
-        public async Task<IActionResult> CleanupDeletedUsers()
+       // [HttpDelete("Oprydning/Brugere")]
+        [HttpDelete("Oprydning/Brugere/{id}")]
+        public async Task<IActionResult> CleanupDeletedUsers(int id)
         {
-            int deleted = 0;
-            var result = _context.Bruger.Where(b => b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date ).ToList();
+            var result =  _context.Bruger.Where(b => b.DeleteTime != null && b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date ).ToList();
             if (result == null)
             {
                 return NoContent();
             }
             try
             {
-                deleted = result.Count();
-                foreach(var item in result)
+                if (result != null)
                 {
-                    _context.Bruger.Remove(item);
+                    foreach(var item in result)
+                    {
+                       _context.Bruger.Remove(item);
+                    }
+                    await _context.SaveChangesAsync();
+
                 }
-                await _context.SaveChangesAsync();
-                return Ok("Brugere slettet\": " + deleted);
+                return NoContent();
             }
             catch (Exception e)
             {
 
-                return BadRequest("Dette gik galt: " + e.Message);
+                return BadRequest("Dette gik galt: " + e.InnerException.Message);
             }
         }
     }

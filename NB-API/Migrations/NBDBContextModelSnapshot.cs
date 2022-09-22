@@ -22,21 +22,6 @@ namespace NB_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BrugerBryggeri", b =>
-                {
-                    b.Property<int>("FollowersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowersId", "FollowsId");
-
-                    b.HasIndex("FollowsId");
-
-                    b.ToTable("BrugerBryggeri");
-                });
-
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
                     b.Property<int>("Id")
@@ -83,10 +68,10 @@ namespace NB_API.Migrations
                         {
                             Id = 1,
                             AcceptedPolicy = false,
-                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQnqOee0YJ7jaopFF1NXlcEI3l6nt6HBLsefj43eOQ9R7fQf3mQT3_iyVFrb3AT28DElMHVUo59AuZAE6wP4VR5SrpP69tEmQH_aFSje92_1dw",
+                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQl0mZGbGt2XE7bJLchEFM8KX7ydpjUXqBXGZVm6GTxKCFPR9z2Ugz6jhaZtlp8QPLNou5WEWaZse1xNcKjqdds4o0vQXucLQRNg3VjZ0VHOMA",
                             Deleted = false,
-                            PwHash = new byte[] { 195, 142, 97, 125, 110, 10, 187, 89, 164, 61, 251, 126, 166, 191, 130, 211, 95, 185, 198, 195, 140, 229, 32, 245, 48, 147, 111, 52, 42, 230, 249, 233, 26, 143, 1, 245, 220, 77, 137, 80, 230, 100, 241, 176, 124, 249, 196, 17, 208, 126, 78, 162, 234, 108, 156, 116, 54, 203, 184, 31, 224, 207, 116, 179 },
-                            PwSalt = new byte[] { 198, 29, 208, 96, 249, 131, 147, 101, 28, 151, 102, 210, 236, 152, 57, 164, 205, 4, 213, 4, 165, 175, 246, 48, 141, 106, 255, 195, 211, 231, 34, 117, 57, 240, 131, 26, 238, 185, 87, 214, 6, 44, 154, 182, 78, 226, 34, 105, 203, 234, 24, 37, 233, 252, 89, 141, 63, 253, 166, 215, 223, 193, 48, 129, 235, 187, 129, 208, 18, 224, 64, 165, 42, 164, 29, 158, 155, 44, 189, 163, 249, 200, 226, 20, 239, 164, 112, 229, 77, 209, 211, 128, 205, 161, 61, 209, 172, 210, 118, 29, 165, 84, 105, 98, 3, 169, 67, 48, 229, 19, 112, 148, 34, 210, 170, 148, 214, 180, 10, 73, 7, 249, 91, 220, 55, 97, 253, 175 },
+                            PwHash = new byte[] { 218, 15, 96, 47, 72, 244, 151, 153, 217, 42, 159, 246, 17, 158, 161, 188, 29, 224, 186, 116, 117, 251, 106, 113, 85, 77, 140, 2, 151, 181, 93, 197, 199, 85, 1, 121, 55, 202, 180, 25, 225, 206, 165, 117, 122, 172, 169, 64, 110, 163, 196, 71, 114, 160, 115, 118, 141, 178, 69, 218, 21, 56, 224, 46 },
+                            PwSalt = new byte[] { 15, 93, 87, 188, 142, 23, 183, 247, 37, 172, 133, 86, 187, 230, 156, 226, 250, 94, 98, 194, 186, 53, 191, 125, 92, 158, 162, 89, 187, 19, 182, 32, 22, 229, 135, 142, 191, 209, 13, 103, 90, 150, 112, 173, 0, 28, 170, 10, 3, 57, 82, 101, 114, 57, 210, 204, 115, 89, 86, 2, 167, 245, 232, 212, 107, 244, 58, 96, 233, 49, 250, 127, 22, 218, 181, 218, 225, 56, 67, 235, 127, 127, 255, 254, 73, 178, 247, 111, 16, 24, 54, 240, 240, 128, 209, 24, 251, 37, 139, 210, 92, 153, 175, 205, 254, 117, 239, 89, 119, 111, 35, 48, 47, 110, 158, 90, 206, 113, 40, 23, 56, 211, 236, 12, 220, 1, 35, 10 },
                             RolleId = 3
                         });
                 });
@@ -101,6 +86,9 @@ namespace NB_API.Migrations
 
                     b.Property<string>("Beskrivelse")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BrugerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("BryggeriLogo")
                         .HasColumnType("nvarchar(max)");
@@ -120,11 +108,39 @@ namespace NB_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrugerId");
+
                     b.HasIndex("KontaktoplysningerId")
                         .IsUnique()
                         .HasFilter("[KontaktoplysningerId] IS NOT NULL");
 
                     b.ToTable("Bryggeri");
+                });
+
+            modelBuilder.Entity("NB_API.Models.BryggeriFollowers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BryggeriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FolloerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BryggeriId");
+
+                    b.HasIndex("FolloerId");
+
+                    b.ToTable("BryggeriFollowers");
                 });
 
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
@@ -379,9 +395,7 @@ namespace NB_API.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LoginTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasComputedColumnSql("getutcdate()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -537,9 +551,7 @@ namespace NB_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Oprettet")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime?>("Oprettet")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("PostId")
@@ -716,21 +728,6 @@ namespace NB_API.Migrations
                     b.ToTable("Tag");
                 });
 
-            modelBuilder.Entity("BrugerBryggeri", b =>
-                {
-                    b.HasOne("NB_API.Models.Bruger", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NB_API.Models.Bryggeri", null)
-                        .WithMany()
-                        .HasForeignKey("FollowsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
                     b.HasOne("NB_API.Models.Kontaktoplysninger", "Kontaktoplysninger")
@@ -750,11 +747,32 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Bryggeri", b =>
                 {
+                    b.HasOne("NB_API.Models.Bruger", null)
+                        .WithMany("Follows")
+                        .HasForeignKey("BrugerId");
+
                     b.HasOne("NB_API.Models.Kontaktoplysninger", "Kontaktoplysninger")
                         .WithOne("Bryggeri")
                         .HasForeignKey("NB_API.Models.Bryggeri", "KontaktoplysningerId");
 
                     b.Navigation("Kontaktoplysninger");
+                });
+
+            modelBuilder.Entity("NB_API.Models.BryggeriFollowers", b =>
+                {
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
+                        .WithMany("Followers")
+                        .HasForeignKey("BryggeriId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Bruger", "Folloer")
+                        .WithMany()
+                        .HasForeignKey("FolloerId");
+
+                    b.Navigation("Bryggeri");
+
+                    b.Navigation("Folloer");
                 });
 
             modelBuilder.Entity("NB_API.Models.Certifikat", b =>
@@ -991,11 +1009,15 @@ namespace NB_API.Migrations
 
                     b.Navigation("Deltager");
 
+                    b.Navigation("Follows");
+
                     b.Navigation("Rapporter");
                 });
 
             modelBuilder.Entity("NB_API.Models.Bryggeri", b =>
                 {
+                    b.Navigation("Followers");
+
                     b.Navigation("Samarbejde");
 
                     b.Navigation("Tags");
