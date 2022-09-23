@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using NB_API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NB_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize(Roles = "Administrator")]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -16,11 +17,29 @@ namespace NB_API.Controllers
             _context = context;
         }
 
+        // Get BrugereUpForDeletion()
+        [HttpGet("Oprydning/Brugere")]
+        public async Task<ActionResult<Bruger>> BrugereUpForDeletion()
+        {
+            if (_context == null)
+
+	        {
+                return NoContent();
+	        }
+            var result = await _context.Bruger.Where(b => b.DeleteTime != null && b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date).ToListAsync();
+            if (result == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(result);
+        }
+
        // [HttpDelete("Oprydning/Brugere")]
         [HttpDelete("Oprydning/Brugere/{id}")]
-        public async Task<IActionResult> CleanupDeletedUsers(int id)
+        public async Task<ActionResult<Bruger>> CleanupDeletedUsers(int id)
         {
-            var result =  _context.Bruger.Where(b => b.DeleteTime != null && b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date ).ToList();
+            var result =  await _context.Bruger.Where(b => b.DeleteTime != null && b.DeleteTime.Value.AddDays(92) < DateTime.Now.Date ).ToListAsync();
             if (result == null)
             {
                 return NoContent();
