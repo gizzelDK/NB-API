@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NB_API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NB_API.Controllers
 {
@@ -43,7 +44,7 @@ namespace NB_API.Controllers
 
         // PUT: api/BryggeriFollowers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutBryggeriFollowers(int id, BryggeriFollowers bryggeriFollowers)
         {
             if (id != bryggeriFollowers.Id)
@@ -74,7 +75,7 @@ namespace NB_API.Controllers
 
         // POST: api/BryggeriFollowers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize()]
         public async Task<ActionResult<BryggeriFollowers>> PostBryggeriFollowers(BryggeriFollowers bryggeriFollowers)
         {
             _context.BryggeriFollowers.Add(bryggeriFollowers);
@@ -84,7 +85,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/BryggeriFollowers/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteBryggeriFollowers(int id)
         {
             var bryggeriFollowers = await _context.BryggeriFollowers.FindAsync(id);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace NB_API.Controllers
         }
 
         // GET: api/Kontaktoplysningers
-        [HttpGet]
+        [HttpGet, Authorize()]
         public async Task<ActionResult<IEnumerable<Kontaktoplysninger>>> GetKontaktoplysninger()
         {
             try
@@ -50,7 +51,7 @@ namespace NB_API.Controllers
         }
 
         // GET: api/Kontaktoplysningers/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize()]
         public async Task<ActionResult<Kontaktoplysninger>> GetKontaktoplysninger(int id)
         {
             try
@@ -73,7 +74,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Kontaktoplysningers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutKontaktoplysninger(int id, Kontaktoplysninger kontaktoplysninger)
         {                               
                 if (id != kontaktoplysninger.Id)
@@ -129,7 +130,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/Kontaktoplysningers/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteKontaktoplysninger(int id)
         {
             if (_context.Kontaktoplysninger == null)

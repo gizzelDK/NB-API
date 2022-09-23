@@ -30,9 +30,7 @@ namespace NB_API.Controllers
 
         // GET: api/Brugers
         //GET: protected with admin
-        //[HttpGet]
-        [HttpGet]
-        [HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet, Authorize()]
         public async Task<ActionResult<IEnumerable<Bruger>>> GetBruger()
         {
             try
@@ -73,7 +71,7 @@ namespace NB_API.Controllers
         }
 
         // GET: api/Brugers/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize()]
         public async Task<ActionResult<Bruger>> GetBruger(int id)
         {
             try
@@ -153,7 +151,7 @@ namespace NB_API.Controllers
         }
 
         // PUT api/Brugere/pw
-        [HttpPut("pw/{id}")]
+        [HttpPut("pw/{id}"), Authorize()]
         public async Task<IActionResult> PutBrugerPw(int id, PwDto pwDto)
         {
             try
@@ -199,7 +197,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Brugers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutBruger(int id, BrugerDto bruger)
         {
             try
@@ -248,7 +246,7 @@ namespace NB_API.Controllers
         }
         // PUT: api/Brugers/Offentlighed/{id}
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("Offentlighed/{id}")]
+        [HttpPut("Offentlighed/{id}"), Authorize()]
         public async Task<IActionResult> PutBrugerPrivacySetting(int id, bool setting)
         {
             try
@@ -279,7 +277,7 @@ namespace NB_API.Controllers
         }
          // PUT: api/Brugers/AcceptedPolicy/{BrugerId}
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("AcceptedPolicy/{id}")]
+        [HttpPut("AcceptedPolicy/{id}"), Authorize()]
         public async Task<IActionResult> PutBrugerAcceptedPolicy(int id, bool setting)
         {
             try

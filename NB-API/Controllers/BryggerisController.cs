@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Bryggeris/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutBryggeri(int id, Bryggeri bryggeri)
         {
             if (id != bryggeri.Id)
@@ -87,7 +88,7 @@ namespace NB_API.Controllers
 
         // POST: api/Bryggeris
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize()]
         public async Task<ActionResult<Bryggeri>> PostBryggeri(Bryggeri bryggeri)
         {
           if (_context.Bryggeri == null)
@@ -101,7 +102,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/Bryggeris/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteBryggeri(int id)
         {
             try

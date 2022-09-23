@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,14 +32,14 @@ namespace NB_API.Controllers
         }
 
         // GET: api/Logins
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Login>>> GetLogin()
         {
             return await _context.Login.ToListAsync();
         }
 
         // GET: api/Logins/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Login>> GetLogin(int id)
         {        
             var login = await _context.Login.FindAsync(id);

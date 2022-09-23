@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Kommentars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutKommentar(int id, Kommentar kommentar)
         {
             if (id != kommentar.Id)
@@ -82,7 +83,7 @@ namespace NB_API.Controllers
 
         // POST: api/Kommentars
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize()]
         public async Task<ActionResult<Kommentar>> PostKommentar(Kommentar kommentar)
         {
             var kommentarList = _context.Kommentar.Where(k => k.ForfatterId == kommentar.ForfatterId && k.OlId == kommentar.OlId).ToList();
@@ -106,7 +107,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/Kommentars/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteKommentar(int id)
         {
             if (_context.Kommentar == null)

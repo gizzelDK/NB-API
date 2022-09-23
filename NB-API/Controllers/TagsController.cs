@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Tags/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutTag(int id, Tag tag)
         {
             if (id != tag.Id)
@@ -82,7 +83,7 @@ namespace NB_API.Controllers
 
         // POST: api/Tags
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize()]
         public async Task<ActionResult<Tag>> PostTag(Tag tag)
         {
             var taglist = await _context.Tag.Where(t => t.Navn == tag.Navn).ToListAsync();
@@ -101,7 +102,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/Tags/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteTag(int id)
         {
             if (_context.Tag == null)

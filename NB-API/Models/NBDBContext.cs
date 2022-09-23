@@ -39,7 +39,6 @@ namespace NB_API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            IHashingService hashingService;
             modelBuilder.Entity<Rolle>().HasData(
                 new Rolle { Id = 1, Level = 0, RolleNavn = RolleNavn.AnonymBruger },
                 new Rolle { Id = 2, Level = 10, RolleNavn = RolleNavn.Bruger },
@@ -71,6 +70,40 @@ namespace NB_API.Models
                             RolleId = 3, 
                             PwSalt = (byte[])adminSalt.GetValue(0), 
                             PwHash = (byte[])adminSalt.GetValue(1)
+                });
+            modelBuilder.Entity<Tag>().HasData(
+                new Tag
+                {
+                    Id = 1,
+                    Navn = "Lager"
+                },
+                new Tag
+                {
+                    Id = 2,
+                    Navn = "Bajer"
+                },
+                new Tag
+                {
+                    Id = 3,
+                    Navn = "Luxus"
+                },
+                new Tag
+                {
+                    Id = 4,
+                    Navn = "Hvede"
+                },new Tag
+                {
+                    Id = 5,
+                    Navn = "Kun for sjov"
+                },new Tag
+                {
+                    Id = 6,
+                    Navn = "Ølfest"
+                },
+                new Tag
+                {
+                    Id = 7,
+                    Navn = "Pilsner"
                 });
 
             OnModelCreatingPartial(modelBuilder);

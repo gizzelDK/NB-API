@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +70,7 @@ namespace NB_API.Controllers
 
         // PUT: api/Øl/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize()]
         public async Task<IActionResult> PutØl(int id, Øl øl)
         {
             if (id != øl.Id)
@@ -100,7 +101,7 @@ namespace NB_API.Controllers
 
         // POST: api/Øl
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize()]
         public async Task<ActionResult<Øl>> PostØl(Øl øl)
         {
           if (_context.Øl == null)
@@ -114,7 +115,7 @@ namespace NB_API.Controllers
         }
 
         // DELETE: api/Øl/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize()]
         public async Task<IActionResult> DeleteØl(int id)
         {
             if (_context.Øl == null)
