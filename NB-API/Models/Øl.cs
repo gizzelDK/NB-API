@@ -11,6 +11,7 @@
         public float Procent { get; set; }
         public string Smag { get; set; }
         public string Beskrivelse { get; set; }
+        public int? samarbejdeId { get; set; }
         public Opskrift? Bryggeprocess { get; set; }
         public string? OlBillede { get; set; }
         public DateTime Aargang { get; set; }

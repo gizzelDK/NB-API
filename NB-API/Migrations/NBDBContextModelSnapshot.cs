@@ -68,10 +68,10 @@ namespace NB_API.Migrations
                         {
                             Id = 1,
                             AcceptedPolicy = false,
-                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQmg0s-pvMsJeTLYukyM2myI_Yd8rxTe-Y2obB7omttM4MgnSGO1vdttSAHDTLUBc2RDxiS_6KiHq8rq6aC0ryGU5c7Avu8uwzjQzCsXX806Bw",
+                            Brugernavn = "CfDJ8CU3oWbkDJlJrPGNMbNfAoS20OEZt0fmiBGCOSdl4qO90pEUNz1skK7s7MCgXsGB3umnaFnZmMcN5bRAA6G-iPDZ0DsXyc505T2W3AffC_sAQmA9goniUVn_oVJKjVcOdA",
                             Deleted = false,
-                            PwHash = new byte[] { 41, 157, 102, 40, 183, 208, 117, 143, 67, 249, 188, 177, 220, 31, 226, 137, 204, 13, 145, 233, 140, 56, 132, 144, 156, 245, 77, 143, 31, 218, 20, 203, 144, 241, 65, 41, 216, 203, 194, 233, 2, 180, 17, 18, 178, 36, 223, 155, 107, 71, 44, 217, 159, 23, 79, 145, 21, 12, 76, 203, 13, 126, 142, 208 },
-                            PwSalt = new byte[] { 158, 72, 40, 101, 178, 98, 137, 169, 188, 16, 214, 197, 93, 152, 69, 193, 110, 151, 135, 250, 18, 235, 216, 129, 6, 252, 15, 167, 168, 218, 28, 67, 119, 223, 186, 237, 199, 209, 197, 124, 104, 162, 69, 24, 78, 117, 239, 196, 253, 36, 209, 236, 127, 120, 236, 148, 162, 81, 107, 230, 65, 25, 18, 166, 43, 41, 143, 213, 110, 229, 253, 26, 52, 127, 186, 89, 193, 171, 43, 98, 58, 98, 27, 147, 136, 31, 108, 156, 49, 213, 225, 192, 9, 193, 218, 71, 245, 5, 86, 9, 43, 27, 19, 32, 38, 218, 224, 152, 206, 106, 185, 89, 169, 90, 25, 29, 170, 154, 231, 231, 9, 74, 19, 195, 233, 66, 236, 141 },
+                            PwHash = new byte[] { 222, 28, 218, 208, 130, 224, 2, 72, 185, 49, 57, 12, 87, 228, 180, 47, 57, 240, 167, 254, 115, 108, 192, 225, 203, 175, 14, 183, 4, 11, 195, 95, 116, 170, 92, 31, 202, 248, 155, 98, 146, 54, 172, 146, 137, 60, 7, 71, 114, 209, 201, 136, 220, 250, 54, 89, 234, 223, 160, 228, 24, 232, 71, 195 },
+                            PwSalt = new byte[] { 69, 81, 40, 101, 156, 79, 120, 87, 150, 170, 235, 31, 187, 215, 37, 118, 160, 212, 192, 99, 100, 111, 107, 30, 210, 44, 169, 105, 234, 145, 163, 8, 131, 139, 26, 43, 36, 40, 40, 2, 35, 150, 83, 188, 60, 102, 78, 14, 75, 125, 183, 45, 228, 2, 104, 191, 98, 157, 41, 57, 57, 97, 10, 78, 28, 30, 190, 49, 227, 128, 15, 12, 176, 63, 148, 253, 224, 185, 158, 138, 134, 62, 221, 117, 25, 8, 251, 231, 117, 12, 218, 127, 4, 181, 252, 215, 79, 227, 11, 185, 206, 113, 101, 15, 91, 91, 219, 192, 33, 136, 94, 48, 176, 146, 44, 238, 252, 26, 176, 162, 122, 115, 110, 64, 208, 70, 97, 251 },
                             RolleId = 3
                         });
                 });
@@ -404,93 +404,6 @@ namespace NB_API.Migrations
                     b.ToTable("Login");
                 });
 
-            modelBuilder.Entity("NB_API.Models.Øl", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Aargang")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Antal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Beskrivelse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BryggeriId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FlaskeResAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Land")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Navn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OlBillede")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Procent")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Smag")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TondeAntal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BryggeriId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("Øl");
-                });
-
-            modelBuilder.Entity("NB_API.Models.ØlTags", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ØlId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TagId");
-
-                    b.HasIndex("ØlId");
-
-                    b.ToTable("ØlTags");
-                });
-
             modelBuilder.Entity("NB_API.Models.Opskrift", b =>
                 {
                     b.Property<int>("Id")
@@ -771,6 +684,96 @@ namespace NB_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NB_API.Models.Øl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Aargang")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Antal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Beskrivelse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BryggeriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FlaskeAntal")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FlaskeResAntal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Land")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Navn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OlBillede")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Procent")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Smag")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TondeAntal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("samarbejdeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BryggeriId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("Øl");
+                });
+
+            modelBuilder.Entity("NB_API.Models.ØlTags", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ØlId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("ØlId");
+
+                    b.ToTable("ØlTags");
+                });
+
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
                     b.HasOne("NB_API.Models.Kontaktoplysninger", "Kontaktoplysninger")
@@ -936,40 +939,6 @@ namespace NB_API.Migrations
                     b.Navigation("Bruger");
                 });
 
-            modelBuilder.Entity("NB_API.Models.Øl", b =>
-                {
-                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
-                        .WithMany("Øl")
-                        .HasForeignKey("BryggeriId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NB_API.Models.Tag", null)
-                        .WithMany("Øl")
-                        .HasForeignKey("TagId");
-
-                    b.Navigation("Bryggeri");
-                });
-
-            modelBuilder.Entity("NB_API.Models.ØlTags", b =>
-                {
-                    b.HasOne("NB_API.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NB_API.Models.Øl", "Øl")
-                        .WithMany("Tags")
-                        .HasForeignKey("ØlId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tag");
-
-                    b.Navigation("Øl");
-                });
-
             modelBuilder.Entity("NB_API.Models.Opskrift", b =>
                 {
                     b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
@@ -1050,6 +1019,40 @@ namespace NB_API.Migrations
                         .HasForeignKey("BryggeriId");
                 });
 
+            modelBuilder.Entity("NB_API.Models.Øl", b =>
+                {
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
+                        .WithMany("Øl")
+                        .HasForeignKey("BryggeriId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Tag", null)
+                        .WithMany("Øl")
+                        .HasForeignKey("TagId");
+
+                    b.Navigation("Bryggeri");
+                });
+
+            modelBuilder.Entity("NB_API.Models.ØlTags", b =>
+                {
+                    b.HasOne("NB_API.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NB_API.Models.Øl", "Øl")
+                        .WithMany("Tags")
+                        .HasForeignKey("ØlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("Øl");
+                });
+
             modelBuilder.Entity("NB_API.Models.Bruger", b =>
                 {
                     b.Navigation("Certifikats");
@@ -1091,6 +1094,15 @@ namespace NB_API.Migrations
                     b.Navigation("Bryggeri");
                 });
 
+            modelBuilder.Entity("NB_API.Models.Tag", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Fora");
+
+                    b.Navigation("Øl");
+                });
+
             modelBuilder.Entity("NB_API.Models.Øl", b =>
                 {
                     b.Navigation("Bryggeprocess");
@@ -1100,15 +1112,6 @@ namespace NB_API.Migrations
                     b.Navigation("Samarbejder");
 
                     b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("NB_API.Models.Tag", b =>
-                {
-                    b.Navigation("Events");
-
-                    b.Navigation("Fora");
-
-                    b.Navigation("Øl");
                 });
 #pragma warning restore 612, 618
         }
