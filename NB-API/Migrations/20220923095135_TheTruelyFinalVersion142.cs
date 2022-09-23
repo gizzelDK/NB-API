@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class MoreToCome : Migration
+    public partial class TheTruelyFinalVersion142 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -66,8 +66,7 @@ namespace NB_API.Migrations
                         name: "FK_Bruger_Kontaktoplysninger_KontaktoplysningerId",
                         column: x => x.KontaktoplysningerId,
                         principalTable: "Kontaktoplysninger",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bruger_Rolle_RolleId",
                         column: x => x.RolleId,
@@ -431,7 +430,7 @@ namespace NB_API.Migrations
                         column: x => x.ForumId,
                         principalTable: "Forum",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Post_Post_SvarerId",
                         column: x => x.SvarerId,
@@ -499,7 +498,8 @@ namespace NB_API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OlId = table.Column<int>(type: "int", nullable: false),
+                    OlId = table.Column<int>(type: "int", nullable: true),
+                    BryggeriId = table.Column<int>(type: "int", nullable: true),
                     StepOne = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepTwo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepThree = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -511,11 +511,15 @@ namespace NB_API.Migrations
                 {
                     table.PrimaryKey("PK_Opskrift", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Opskrift_Bryggeri_BryggeriId",
+                        column: x => x.BryggeriId,
+                        principalTable: "Bryggeri",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Opskrift_Øl_OlId",
                         column: x => x.OlId,
                         principalTable: "Øl",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -537,7 +541,8 @@ namespace NB_API.Migrations
                         name: "FK_Samarbejde_Bryggeri_BryggeriId",
                         column: x => x.BryggeriId,
                         principalTable: "Bryggeri",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Samarbejde_Øl_ØlId",
                         column: x => x.ØlId,
@@ -563,7 +568,7 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQl0mZGbGt2XE7bJLchEFM8KX7ydpjUXqBXGZVm6GTxKCFPR9z2Ugz6jhaZtlp8QPLNou5WEWaZse1xNcKjqdds4o0vQXucLQRNg3VjZ0VHOMA", null, false, null, new byte[] { 218, 15, 96, 47, 72, 244, 151, 153, 217, 42, 159, 246, 17, 158, 161, 188, 29, 224, 186, 116, 117, 251, 106, 113, 85, 77, 140, 2, 151, 181, 93, 197, 199, 85, 1, 121, 55, 202, 180, 25, 225, 206, 165, 117, 122, 172, 169, 64, 110, 163, 196, 71, 114, 160, 115, 118, 141, 178, 69, 218, 21, 56, 224, 46 }, new byte[] { 15, 93, 87, 188, 142, 23, 183, 247, 37, 172, 133, 86, 187, 230, 156, 226, 250, 94, 98, 194, 186, 53, 191, 125, 92, 158, 162, 89, 187, 19, 182, 32, 22, 229, 135, 142, 191, 209, 13, 103, 90, 150, 112, 173, 0, 28, 170, 10, 3, 57, 82, 101, 114, 57, 210, 204, 115, 89, 86, 2, 167, 245, 232, 212, 107, 244, 58, 96, 233, 49, 250, 127, 22, 218, 181, 218, 225, 56, 67, 235, 127, 127, 255, 254, 73, 178, 247, 111, 16, 24, 54, 240, 240, 128, 209, 24, 251, 37, 139, 210, 92, 153, 175, 205, 254, 117, 239, 89, 119, 111, 35, 48, 47, 110, 158, 90, 206, 113, 40, 23, 56, 211, 236, 12, 220, 1, 35, 10 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkllcbokz1zAkz1uMa3tOjxcrq-1--r_XVA1RtWr-8qYHm2yiWk8thQgy63hKBg1gxdxMg9gsoO1jtUAlRSQQ2gTRNOA6xT7VKKE9YGZ-fGOA", null, false, null, new byte[] { 149, 157, 64, 169, 141, 72, 54, 34, 89, 56, 108, 119, 56, 71, 54, 138, 150, 144, 1, 251, 157, 213, 212, 143, 160, 20, 124, 211, 23, 167, 211, 125, 147, 48, 246, 109, 78, 164, 35, 16, 136, 140, 38, 210, 168, 136, 209, 145, 41, 235, 129, 21, 123, 146, 228, 191, 68, 142, 21, 144, 118, 3, 144, 50 }, new byte[] { 54, 12, 111, 249, 92, 80, 23, 93, 146, 153, 203, 58, 114, 230, 194, 188, 243, 37, 104, 141, 70, 118, 182, 145, 151, 62, 71, 45, 25, 173, 156, 137, 72, 2, 150, 224, 56, 125, 175, 185, 99, 63, 193, 221, 68, 74, 166, 32, 169, 241, 28, 123, 83, 250, 125, 14, 1, 87, 43, 250, 94, 227, 2, 190, 241, 43, 190, 9, 86, 143, 88, 45, 190, 54, 255, 24, 222, 224, 144, 129, 249, 89, 101, 89, 100, 53, 151, 212, 196, 89, 192, 35, 103, 67, 48, 146, 71, 3, 182, 58, 19, 167, 0, 67, 229, 142, 77, 15, 9, 99, 15, 61, 208, 204, 131, 244, 44, 81, 152, 132, 154, 84, 143, 248, 239, 86, 129, 79 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",
@@ -683,10 +688,16 @@ namespace NB_API.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Opskrift_BryggeriId",
+                table: "Opskrift",
+                column: "BryggeriId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Opskrift_OlId",
                 table: "Opskrift",
                 column: "OlId",
-                unique: true);
+                unique: true,
+                filter: "[OlId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_BrugerId",

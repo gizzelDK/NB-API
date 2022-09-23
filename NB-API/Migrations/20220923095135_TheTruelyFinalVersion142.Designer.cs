@@ -12,14 +12,14 @@ using NB_API.Models;
 namespace NB_API.Migrations
 {
     [DbContext(typeof(NBDBContext))]
-    [Migration("20220920133845_MoreToCome")]
-    partial class MoreToCome
+    [Migration("20220923095135_TheTruelyFinalVersion142")]
+    partial class TheTruelyFinalVersion142
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -70,10 +70,10 @@ namespace NB_API.Migrations
                         {
                             Id = 1,
                             AcceptedPolicy = false,
-                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQl0mZGbGt2XE7bJLchEFM8KX7ydpjUXqBXGZVm6GTxKCFPR9z2Ugz6jhaZtlp8QPLNou5WEWaZse1xNcKjqdds4o0vQXucLQRNg3VjZ0VHOMA",
+                            Brugernavn = "CfDJ8DXPo3W4uhxPoIhCOGVRAQkllcbokz1zAkz1uMa3tOjxcrq-1--r_XVA1RtWr-8qYHm2yiWk8thQgy63hKBg1gxdxMg9gsoO1jtUAlRSQQ2gTRNOA6xT7VKKE9YGZ-fGOA",
                             Deleted = false,
-                            PwHash = new byte[] { 218, 15, 96, 47, 72, 244, 151, 153, 217, 42, 159, 246, 17, 158, 161, 188, 29, 224, 186, 116, 117, 251, 106, 113, 85, 77, 140, 2, 151, 181, 93, 197, 199, 85, 1, 121, 55, 202, 180, 25, 225, 206, 165, 117, 122, 172, 169, 64, 110, 163, 196, 71, 114, 160, 115, 118, 141, 178, 69, 218, 21, 56, 224, 46 },
-                            PwSalt = new byte[] { 15, 93, 87, 188, 142, 23, 183, 247, 37, 172, 133, 86, 187, 230, 156, 226, 250, 94, 98, 194, 186, 53, 191, 125, 92, 158, 162, 89, 187, 19, 182, 32, 22, 229, 135, 142, 191, 209, 13, 103, 90, 150, 112, 173, 0, 28, 170, 10, 3, 57, 82, 101, 114, 57, 210, 204, 115, 89, 86, 2, 167, 245, 232, 212, 107, 244, 58, 96, 233, 49, 250, 127, 22, 218, 181, 218, 225, 56, 67, 235, 127, 127, 255, 254, 73, 178, 247, 111, 16, 24, 54, 240, 240, 128, 209, 24, 251, 37, 139, 210, 92, 153, 175, 205, 254, 117, 239, 89, 119, 111, 35, 48, 47, 110, 158, 90, 206, 113, 40, 23, 56, 211, 236, 12, 220, 1, 35, 10 },
+                            PwHash = new byte[] { 149, 157, 64, 169, 141, 72, 54, 34, 89, 56, 108, 119, 56, 71, 54, 138, 150, 144, 1, 251, 157, 213, 212, 143, 160, 20, 124, 211, 23, 167, 211, 125, 147, 48, 246, 109, 78, 164, 35, 16, 136, 140, 38, 210, 168, 136, 209, 145, 41, 235, 129, 21, 123, 146, 228, 191, 68, 142, 21, 144, 118, 3, 144, 50 },
+                            PwSalt = new byte[] { 54, 12, 111, 249, 92, 80, 23, 93, 146, 153, 203, 58, 114, 230, 194, 188, 243, 37, 104, 141, 70, 118, 182, 145, 151, 62, 71, 45, 25, 173, 156, 137, 72, 2, 150, 224, 56, 125, 175, 185, 99, 63, 193, 221, 68, 74, 166, 32, 169, 241, 28, 123, 83, 250, 125, 14, 1, 87, 43, 250, 94, 227, 2, 190, 241, 43, 190, 9, 86, 143, 88, 45, 190, 54, 255, 24, 222, 224, 144, 129, 249, 89, 101, 89, 100, 53, 151, 212, 196, 89, 192, 35, 103, 67, 48, 146, 71, 3, 182, 58, 19, 167, 0, 67, 229, 142, 77, 15, 9, 99, 15, 61, 208, 204, 131, 244, 44, 81, 152, 132, 154, 84, 143, 248, 239, 86, 129, 79 },
                             RolleId = 3
                         });
                 });
@@ -501,10 +501,13 @@ namespace NB_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("BryggeriId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Offentliggjort")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OlId")
+                    b.Property<int?>("OlId")
                         .HasColumnType("int");
 
                     b.Property<string>("StepFive")
@@ -529,8 +532,11 @@ namespace NB_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BryggeriId");
+
                     b.HasIndex("OlId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[OlId] IS NOT NULL");
 
                     b.ToTable("Opskrift");
                 });
@@ -931,11 +937,15 @@ namespace NB_API.Migrations
 
             modelBuilder.Entity("NB_API.Models.Opskrift", b =>
                 {
+                    b.HasOne("NB_API.Models.Bryggeri", "Bryggeri")
+                        .WithMany()
+                        .HasForeignKey("BryggeriId");
+
                     b.HasOne("NB_API.Models.Øl", "Ol")
                         .WithOne("Bryggeprocess")
-                        .HasForeignKey("NB_API.Models.Opskrift", "OlId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NB_API.Models.Opskrift", "OlId");
+
+                    b.Navigation("Bryggeri");
 
                     b.Navigation("Ol");
                 });

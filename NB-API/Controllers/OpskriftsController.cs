@@ -50,14 +50,33 @@ namespace NB_API.Controllers
         }
         // GET: api/Opskrifts/5
         [HttpGet("Øl/{id}")]
-        public async Task<ActionResult<Opskrift>> GetOpskriftOnØlId(int id)
+        public async Task<ActionResult<List<Opskrift>>> GetOpskriftOnØlId(int id)
         {
           if (_context.Opskrift == null)
           {
               return NotFound();
           }
             var dbØl = _context.Øl.Find(id);
-            var opskrift = await _context.Opskrift.Where(o => o.OlId == dbØl.Id).FirstOrDefaultAsync();
+            var opskrift = await _context.Opskrift.Where(o => o.OlId == dbØl.Id).ToListAsync();
+
+            if (opskrift == null)
+            {
+                return NotFound();
+            }
+
+            return opskrift;
+        }
+        
+        // GET: api/Opskrifts/Bryggeri/5
+        [HttpGet("Bryggeri/{id}")]
+        public async Task<ActionResult<List<Opskrift>>> GetOpskriftOnBryggeriId(int id)
+        {
+          if (_context.Opskrift == null)
+          {
+              return NotFound();
+          }
+            var dbBryggeri = _context.Bryggeri.Find(id);
+            var opskrift = await _context.Opskrift.Where(o => o.BryggeriId == dbBryggeri.Id).ToListAsync();
 
             if (opskrift == null)
             {
