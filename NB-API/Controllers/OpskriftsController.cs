@@ -48,6 +48,24 @@ namespace NB_API.Controllers
 
             return opskrift;
         }
+        // GET: api/Opskrifts/5
+        [HttpGet("Øl/{id}")]
+        public async Task<ActionResult<Opskrift>> GetOpskriftOnØlId(int id)
+        {
+          if (_context.Opskrift == null)
+          {
+              return NotFound();
+          }
+            var dbØl = _context.Øl.Find(id);
+            var opskrift = await _context.Opskrift.Where(o => o.OlId == dbØl.Id).FirstOrDefaultAsync();
+
+            if (opskrift == null)
+            {
+                return NotFound();
+            }
+
+            return opskrift;
+        }
 
         // PUT: api/Opskrifts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
