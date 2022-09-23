@@ -8,6 +8,9 @@ Open Visual Studio 2022 and open Package Manager Console
 
 enter
 ```
+Add-Migration encryptAdminWithExistingSalt
+```
+```
 Update-Database
 ```
 
