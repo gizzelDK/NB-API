@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NB_API.Migrations
 {
-    public partial class TheTruelyFinalVersion142 : Migration
+    public partial class AbsoluteFinalMigrationVersion83782 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -430,7 +430,7 @@ namespace NB_API.Migrations
                         column: x => x.ForumId,
                         principalTable: "Forum",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Post_Post_SvarerId",
                         column: x => x.SvarerId,
@@ -541,8 +541,7 @@ namespace NB_API.Migrations
                         name: "FK_Samarbejde_Bryggeri_BryggeriId",
                         column: x => x.BryggeriId,
                         principalTable: "Bryggeri",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Samarbejde_Øl_ØlId",
                         column: x => x.ØlId,
@@ -553,22 +552,31 @@ namespace NB_API.Migrations
             migrationBuilder.InsertData(
                 table: "Rolle",
                 columns: new[] { "Id", "Level", "RolleNavn" },
-                values: new object[] { 1, 0, 0 });
+                values: new object[,]
+                {
+                    { 1, 0, 0 },
+                    { 2, 10, 10 },
+                    { 3, 20, 20 }
+                });
 
             migrationBuilder.InsertData(
-                table: "Rolle",
-                columns: new[] { "Id", "Level", "RolleNavn" },
-                values: new object[] { 2, 10, 10 });
-
-            migrationBuilder.InsertData(
-                table: "Rolle",
-                columns: new[] { "Id", "Level", "RolleNavn" },
-                values: new object[] { 3, 20, 20 });
+                table: "Tag",
+                columns: new[] { "Id", "BryggeriId", "Navn" },
+                values: new object[,]
+                {
+                    { 1, null, "Lager" },
+                    { 2, null, "Bajer" },
+                    { 3, null, "Luxus" },
+                    { 4, null, "Hvede" },
+                    { 5, null, "Kun for sjov" },
+                    { 6, null, "Ølfest" },
+                    { 7, null, "Pilsner" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Bruger",
                 columns: new[] { "Id", "AcceptedPolicy", "Brugernavn", "DeleteTime", "Deleted", "KontaktoplysningerId", "PwHash", "PwSalt", "RolleId" },
-                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQkllcbokz1zAkz1uMa3tOjxcrq-1--r_XVA1RtWr-8qYHm2yiWk8thQgy63hKBg1gxdxMg9gsoO1jtUAlRSQQ2gTRNOA6xT7VKKE9YGZ-fGOA", null, false, null, new byte[] { 149, 157, 64, 169, 141, 72, 54, 34, 89, 56, 108, 119, 56, 71, 54, 138, 150, 144, 1, 251, 157, 213, 212, 143, 160, 20, 124, 211, 23, 167, 211, 125, 147, 48, 246, 109, 78, 164, 35, 16, 136, 140, 38, 210, 168, 136, 209, 145, 41, 235, 129, 21, 123, 146, 228, 191, 68, 142, 21, 144, 118, 3, 144, 50 }, new byte[] { 54, 12, 111, 249, 92, 80, 23, 93, 146, 153, 203, 58, 114, 230, 194, 188, 243, 37, 104, 141, 70, 118, 182, 145, 151, 62, 71, 45, 25, 173, 156, 137, 72, 2, 150, 224, 56, 125, 175, 185, 99, 63, 193, 221, 68, 74, 166, 32, 169, 241, 28, 123, 83, 250, 125, 14, 1, 87, 43, 250, 94, 227, 2, 190, 241, 43, 190, 9, 86, 143, 88, 45, 190, 54, 255, 24, 222, 224, 144, 129, 249, 89, 101, 89, 100, 53, 151, 212, 196, 89, 192, 35, 103, 67, 48, 146, 71, 3, 182, 58, 19, 167, 0, 67, 229, 142, 77, 15, 9, 99, 15, 61, 208, 204, 131, 244, 44, 81, 152, 132, 154, 84, 143, 248, 239, 86, 129, 79 }, 3 });
+                values: new object[] { 1, false, "CfDJ8DXPo3W4uhxPoIhCOGVRAQmg0s-pvMsJeTLYukyM2myI_Yd8rxTe-Y2obB7omttM4MgnSGO1vdttSAHDTLUBc2RDxiS_6KiHq8rq6aC0ryGU5c7Avu8uwzjQzCsXX806Bw", null, false, null, new byte[] { 41, 157, 102, 40, 183, 208, 117, 143, 67, 249, 188, 177, 220, 31, 226, 137, 204, 13, 145, 233, 140, 56, 132, 144, 156, 245, 77, 143, 31, 218, 20, 203, 144, 241, 65, 41, 216, 203, 194, 233, 2, 180, 17, 18, 178, 36, 223, 155, 107, 71, 44, 217, 159, 23, 79, 145, 21, 12, 76, 203, 13, 126, 142, 208 }, new byte[] { 158, 72, 40, 101, 178, 98, 137, 169, 188, 16, 214, 197, 93, 152, 69, 193, 110, 151, 135, 250, 18, 235, 216, 129, 6, 252, 15, 167, 168, 218, 28, 67, 119, 223, 186, 237, 199, 209, 197, 124, 104, 162, 69, 24, 78, 117, 239, 196, 253, 36, 209, 236, 127, 120, 236, 148, 162, 81, 107, 230, 65, 25, 18, 166, 43, 41, 143, 213, 110, 229, 253, 26, 52, 127, 186, 89, 193, 171, 43, 98, 58, 98, 27, 147, 136, 31, 108, 156, 49, 213, 225, 192, 9, 193, 218, 71, 245, 5, 86, 9, 43, 27, 19, 32, 38, 218, 224, 152, 206, 106, 185, 89, 169, 90, 25, 29, 170, 154, 231, 231, 9, 74, 19, 195, 233, 66, 236, 141 }, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bruger_KontaktoplysningerId",
