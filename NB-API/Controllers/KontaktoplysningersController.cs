@@ -54,22 +54,14 @@ namespace NB_API.Controllers
         [HttpGet("{id}"), Authorize()]
         public async Task<ActionResult<Kontaktoplysninger>> GetKontaktoplysninger(int id)
         {
-            try
+            var kontaktoplysning = await _context.Kontaktoplysninger.FindAsync(id);
+            
+            if (kontaktoplysning == null)
             {
-                var kontaktoplysningerBrugerList = await _context.Kontaktoplysninger.ToListAsync();
-                foreach (var i in kontaktoplysningerBrugerList)
-                {
-                    if (i.Email != null)
-                    {
-                        i.Email = _cryptoService.decrypt(i.Email);
-                    }
-                }
-                return Ok(kontaktoplysningerBrugerList);
+                return NotFound();
             }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            kontaktoplysning.Email = _cryptoService.decrypt(kontaktoplysning.Email);
+            return Ok(kontaktoplysning);
         }
 
         // PUT: api/Kontaktoplysningers/5
